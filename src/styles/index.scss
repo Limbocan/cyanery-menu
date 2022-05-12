@@ -1,0 +1,142 @@
+// @use "sass:color";
+
+$preName: cy-menu;
+$prefix: --cy-menu;
+
+.#{$preName} {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  width: var(#{$prefix}-width);
+  background-color: var(#{$prefix}-theme-cyan-bg-color);
+  box-shadow: 0 0 12px #0000004a;
+  color: var(#{$prefix}-theme-cyan-text-color);
+  user-select: none;
+
+  .#{$preName}-toggle-box {
+    position: absolute;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background-color: aqua;
+  }
+
+  &>.#{$preName}-menu-list {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
+
+    .#{$preName}-menu-item {
+      #{$prefix}-time: .5s;
+      list-style: none;
+      width: 100%;
+      overflow: hidden;
+
+      .#{$preName}-menu-item-box {
+        position: relative;
+        padding: 12px 22px 12px 12px;
+        border-left: 3px solid transparent;
+        border-left-width: initial;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        white-space: nowrap;
+        cursor: pointer;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        transition: background .3s ease-in-out, border .3s ease-in-out;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+          border-left-color: var(#{$prefix}-theme-cyan-active-color);
+        }
+
+        &.#{$preName}-open-active {
+          color: rgb(103, 168, 254);
+          border-left-color: var(#{$prefix}-theme-cyan-active-color);
+
+          &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            border: 4px solid transparent;
+            border-left-color: var(#{$prefix}-theme-cyan-active-color);
+            transform: translateY(-50%);
+            transition: border .3s ease-in-out;
+          }
+        }
+
+        .#{$preName}-col-icon {
+          position: absolute;
+          right: 2px;
+          transition: transform .2s linear;
+
+          &.#{$preName}-open-status {
+            transform: rotate(90deg);
+          }
+        }
+      }
+
+      &>.#{$preName}-menu-list {
+        transition: height var(#{$prefix}-time) ease-in-out,
+        padding-top var(#{$prefix}-time) ease-in-out,
+        padding-bottom var(#{$prefix}-time) ease-in-out,
+        max-height var(#{$prefix}-time) ease-in-out;
+
+        &[class*="#{$preName}-list-child"] {
+          overflow: hidden;
+
+          .#{$preName}-menu-item-box {
+            padding-left: 8px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.#{$preName}-popover {
+  #{$prefix}-popover-color: #626d79e2;
+  position: fixed;
+  left: var(#{$prefix}-popover-x);
+  top: var(#{$prefix}-popover-y);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  // transform-origin: 0 0;
+
+  .#{$preName}-popover-tip {
+    position: absolute;
+    left: 0;
+    top: var(#{$prefix}-gap);
+    border: 10px solid transparent;
+    border-right-color: var(#{$prefix}-popover-color);
+    margin-left: -4px;
+  }
+
+  .#{$preName}-popover-content {
+    position: absolute;
+    left: 15px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.329);
+    border-radius: 2px;
+    background-color: var(#{$prefix}-popover-color);
+  }
+}
+
+.popover-enter-active,
+.popover-leave-active {
+  transition: all .5s;
+}
+
+.popover-enter-from,
+.popover-leave-to {
+  opacity: 0;
+  // transform: scale(0);
+}
