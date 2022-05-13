@@ -3,7 +3,6 @@
 import { withInstall } from './utils/install'
 import Menu from './components/menu-content'
 import './styles/index.scss'
-import './styles/scrollbar.scss'
 
 const CyaneryMenu = withInstall(Menu)
 

@@ -79,15 +79,19 @@ const props = defineProps({
 })
 
 // 菜单打开状态
-const isOpen = ref(false)
+const isOpen = computed(() => {
+  return globalState.state.openedMenus.findIndex(m => m.key === props.data.key && m.diff === props.diff) > -1
+})
 // 是否有子菜单
 const hasChild = ref(props.data.children && props.data.children.length > 0)
 // 菜单点击事件
 const menuClick = () => {
   if (hasChild.value && !props.isPopover) {
-    isOpen.value = !isOpen.value
-    if (isOpen.value) globalState.pushMenu({ key: props.data.key })
-    else globalState.remove({ key: props.data.key })
+    // isOpen.value = !isOpen.value
+    const CURR_ITEM = { ...props.data }
+    delete CURR_ITEM.children
+    if (!isOpen.value) globalState.pushMenu({ ...CURR_ITEM, diff: props.diff })
+    else globalState.remove({ ...CURR_ITEM, diff: props.diff })
   }
   globalState.menuEmitsMethod('menu-click', props.data)
 }

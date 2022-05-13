@@ -30,6 +30,16 @@ export const MenuProps = {
     type: Boolean as PropType<boolean>,
     default: false
   },
+  // 保持同级唯一一个子菜单展开
+  unique: {
+    type: Boolean as PropType<boolean>,
+    default: false
+  },
+  // 主题
+  theme: {
+    type: String as PropType<string>,
+    default: 'primary'
+  },
   // 菜单背景色
   backgroundColor: {
     type: String as PropType<string>,
@@ -66,7 +76,8 @@ class GlobalState {
   state
   constructor() {
     this.state = reactive({
-      openedMenus: [],
+      allMenus: [], // 所有菜单数据
+      openedMenus: [], // 打开的菜单项
       MenuPropsData: {}, // 全局组件参数
       menuEmitFn: null // 全局emits方法
     })
@@ -84,18 +95,26 @@ class GlobalState {
     if (!this.state.menuEmitFn) return
     this.state.menuEmitFn(name, value)
   }
-
-  getMenu() {
-    return this.state.openedMenus
+  // 存储菜单数据
+  saveMenus(menus) {
+    if (menus instanceof Array) this.state.allMenus = menus
   }
-
+  // 存储打开的菜单项
   pushMenu(menu) {
+    if (this.state.MenuPropsData.unique) {
+      const DIFF_INDEX = this.state.openedMenus.findIndex(m => m.diff === menu.diff)
+      if (DIFF_INDEX > -1) this.state.openedMenus.splice(DIFF_INDEX, 1)
+    }
     this.state.openedMenus.push(menu)
   }
-
+  // 移除关闭的菜单项
   remove(menu) {
-    const INDEX = this.state.openedMenus.findIndex(m => m.key === menu.key)
+    const INDEX = this.state.openedMenus.findIndex(m => m.key === menu.key && m.diff === menu.diff)
     this.state.openedMenus.splice(INDEX, 1)
+  }
+  // 关闭所有菜单
+  closeAllMenu() {
+    this.state.openedMenus.splice(0, this.state.openedMenus.length)
   }
 }
 

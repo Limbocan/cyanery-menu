@@ -21,6 +21,14 @@ export declare const MenuProps: {
         type: PropType<boolean>;
         default: boolean;
     };
+    unique: {
+        type: PropType<boolean>;
+        default: boolean;
+    };
+    theme: {
+        type: PropType<string>;
+        default: string;
+    };
     backgroundColor: {
         type: PropType<string>;
         default: string;
@@ -45,9 +53,10 @@ declare class GlobalState {
     setMenuProps(props: any): void;
     setMenuEmit(emit: any): void;
     menuEmitsMethod(name: any, value: any): void;
-    getMenu(): any;
+    saveMenus(menus: any): void;
     pushMenu(menu: any): void;
     remove(menu: any): void;
+    closeAllMenu(): void;
 }
 export declare const globalState: GlobalState;
 export {};

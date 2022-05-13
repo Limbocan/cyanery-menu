@@ -56,13 +56,13 @@ export const Menu = defineComponent({
     })
 
     expose({
-      getMenu: () => globalState.getMenu()
+      closeAll: () => globalState.closeAllMenu()
     })
 
     return () => h(
       'div',
       {
-        class: 'cy-menu ' + getClassFomat(props.className),
+        class: 'cy-menu ' + getClassFomat(props.className + ` theme-${props.theme}`),
         style: getStyleFormat([
           { prop: 'width', val: props.width, type: 'num' },
           { prop: 'theme-cyan-bg-color', val: props.backgroundColor, type: 'color' },

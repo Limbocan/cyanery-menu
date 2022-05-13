@@ -19,6 +19,14 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<boolean>;
         default: boolean;
     };
+    unique: {
+        type: import("vue").PropType<boolean>;
+        default: boolean;
+    };
+    theme: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     backgroundColor: {
         type: import("vue").PropType<string>;
         default: string;
@@ -58,6 +66,14 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<boolean>;
         default: boolean;
     };
+    unique: {
+        type: import("vue").PropType<boolean>;
+        default: boolean;
+    };
+    theme: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     backgroundColor: {
         type: import("vue").PropType<string>;
         default: string;
@@ -82,6 +98,8 @@ export declare const Menu: import("vue").DefineComponent<{
     width: string | number;
     open: boolean;
     toggleButton: boolean;
+    unique: boolean;
+    theme: string;
     backgroundColor: string;
     activeColor: string;
     textColor: string;

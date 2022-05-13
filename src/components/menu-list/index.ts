@@ -1,9 +1,9 @@
 
-import { defineComponent, h, ref, PropType, computed, onMounted } from 'vue'
+import { defineComponent, h, PropType, computed, onMounted } from 'vue'
 import MenuChildList from './menu-list.vue'
 import MenuItem from '../menu-item/menu-item.vue'
+import { globalState } from '../../menu-props'
 import type { MenuItemProps } from '../../types'
-import PerfectScrollbar from 'perfect-scrollbar'
 
 // 组件参数
 const MenuListProps = {
@@ -26,22 +26,23 @@ export const MenuListComponent = defineComponent({
   name: 'CyaneryMenuList',
   props: MenuListProps,
   setup(props) {
-    const scrollbar = ref(null)
-
-    onMounted(() => {
-      scrollbar.value = new PerfectScrollbar('.cy-menu-list-child-0', {
-        suppressScrollX: true,
-        wheelSpeed: 0.5,
-        wheelPropagation: true
-      })
-    })
 
     const MENU_NODE = computed(() => {
-      return props.menuList.map(m => h(
+      const MENU_LIST = formatList([...props.menuList])
+      globalState.saveMenus(MENU_LIST)
+      return MENU_LIST.map(m => h(
         MenuItem,
         { data: m, diff: props.diff + 1, itemSlot: props.itemSlot },
       ))
     })
+
+    const formatList = (list) => {
+      return list.map(m => {
+        const ITEM = { ...m }
+        if (m.children) ITEM.children = formatList(m.children)
+        return { ...ITEM, key: ITEM.key ?? ITEM.path }
+      })
+    }
 
     return () => h(MenuChildList, { child: MENU_NODE.value, diff: props.diff, open: true })
   }
