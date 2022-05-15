@@ -5,6 +5,11 @@ import type { MenuItemProps } from './types'
 
 // 组件参数
 export const MenuProps = {
+  // 当前菜单项
+  modelValue: {
+    type: String as PropType<string>,
+    default: '',
+  },
   // 菜单项列表
   data: {
     type: Array as PropType<MenuItemProps[]>,
@@ -34,6 +39,14 @@ export const MenuProps = {
   unique: {
     type: Boolean as PropType<boolean>,
     default: false
+  },
+  showIcon: {
+    type: Boolean as PropType<boolean>,
+    default: true
+  },
+  offset: {
+    type: Number as PropType<number>,
+    default: 6
   },
   // 主题
   theme: {
@@ -67,6 +80,7 @@ export const MenuProps = {
 
 // 菜单回调事件
 export const MenuEmits = [
+  'update:modelValue',
   'update:open',
   'menu-click',
 ]
@@ -78,6 +92,7 @@ class GlobalState {
     this.state = reactive({
       allMenus: [], // 所有菜单数据
       openedMenus: [], // 打开的菜单项
+      activeMenu: [],
       MenuPropsData: {}, // 全局组件参数
       menuEmitFn: null // 全局emits方法
     })
@@ -98,6 +113,26 @@ class GlobalState {
   // 存储菜单数据
   saveMenus(menus) {
     if (menus instanceof Array) this.state.allMenus = menus
+  }
+  // 设置当前活跃菜单项
+  pushActiveMenu(key) {
+    this.state.activeMenu = this.getActiveMenu(key, this.state.allMenus)
+    console.log(key, this.state.activeMenu)
+  }
+  // 获取活跃菜单项
+  getActiveMenu(key, menus, deep = 0, result = []) {
+    for (let i = 0; i < menus.length; i++) {
+      if (result[result.length - 1] === key) break
+      const ITEM = menus[i]
+      result[deep] = ITEM.key
+      if (key === ITEM.key) {
+        result.splice(deep + 1)
+        break
+      } else if (ITEM.children && ITEM.children.length) {
+        this.getActiveMenu(key, ITEM.children, deep + 1, result)
+      }
+    }
+    return result
   }
   // 存储打开的菜单项
   pushMenu(menu) {

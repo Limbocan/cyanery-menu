@@ -1,6 +1,10 @@
 import { PropType } from 'vue';
 import type { MenuItemProps } from './types';
 export declare const MenuProps: {
+    modelValue: {
+        type: PropType<string>;
+        default: string;
+    };
     data: {
         type: PropType<MenuItemProps[]>;
         default: () => any[];
@@ -24,6 +28,14 @@ export declare const MenuProps: {
     unique: {
         type: PropType<boolean>;
         default: boolean;
+    };
+    showIcon: {
+        type: PropType<boolean>;
+        default: boolean;
+    };
+    offset: {
+        type: PropType<number>;
+        default: number;
     };
     theme: {
         type: PropType<string>;
@@ -54,6 +66,8 @@ declare class GlobalState {
     setMenuEmit(emit: any): void;
     menuEmitsMethod(name: any, value: any): void;
     saveMenus(menus: any): void;
+    pushActiveMenu(key: any): void;
+    getActiveMenu(key: any, menus: any, deep?: number, result?: any[]): any[];
     pushMenu(menu: any): void;
     remove(menu: any): void;
     closeAllMenu(): void;

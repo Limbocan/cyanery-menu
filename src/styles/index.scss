@@ -14,7 +14,35 @@ $prefix: --cy-menu;
   box-shadow: 0 0 12px #0000004a;
   user-select: none;
   overflow: hidden;
+  transition: width .2s ease-in-out;
 
+  // 菜单收起状态样式
+  &.#{$preName}-close-status {
+    width: 46px;
+    // 非一级菜单隐藏菜单图标
+    .#{$preName}-menu-list:not(.#{$preName}-list-child-0) {
+      .#{$preName}-menu-icon {
+        display: none;
+      }
+    }
+    // 一级菜单隐藏文字和操作图标
+    &>.#{$preName}-list-child-0>.#{$preName}-menu-item>.#{$preName}-popover-template>.#{$preName}-menu-item-box {
+      // 展示一级菜单图标
+      .#{$preName}-menu-icon {
+        display: unset;
+      }
+      // 隐藏文字和操作图标
+      .#{$preName}-menu-text, .#{$preName}-col-icon {
+        display: none;
+      }
+    }
+  }
+
+  // 菜单展开状态样式
+  &.#{$preName}-open-status {
+    width: var(#{$prefix}-width);
+  }
+  // 菜单切换按钮
   .#{$preName}-toggle-box {
     position: absolute;
     right: 0;
@@ -32,9 +60,9 @@ $prefix: --cy-menu;
     flex: 1;
     overflow: auto;
     transition: height var(#{$prefix}-time) ease-in-out,
-      padding-top var(#{$prefix}-time) ease-in-out,
-      padding-bottom var(#{$prefix}-time) ease-in-out,
-      max-height var(#{$prefix}-time) ease-in-out;
+    padding-top var(#{$prefix}-time) ease-in-out,
+    padding-bottom var(#{$prefix}-time) ease-in-out,
+    max-height var(#{$prefix}-time) ease-in-out;
 
     // 菜单项样式
     & .#{$preName}-menu-item {
@@ -42,9 +70,12 @@ $prefix: --cy-menu;
       list-style: none;
       width: 100%;
       overflow: hidden;
-
+      // 菜单box
       .#{$preName}-menu-item-box {
         position: relative;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
         padding: 12px 22px 12px 12px;
         white-space: nowrap;
         cursor: pointer;
@@ -52,6 +83,16 @@ $prefix: --cy-menu;
         overflow: hidden;
         transition: background .3s ease-in-out, border .3s ease-in-out;
 
+        // 菜单图标
+        .#{$preName}-menu-icon {
+          fill: var(#{$prefix}-theme-cyan-text-color);
+          min-width: 20px;
+          width: 20px;
+          height: 20px;
+          padding: 0 4px;
+          margin-right: 6px;
+        }
+        // 展开/收起图标
         .#{$preName}-col-icon {
           fill: var(#{$prefix}-theme-cyan-text-color);
           position: absolute;
@@ -59,7 +100,6 @@ $prefix: --cy-menu;
           transition: transform .2s linear;
 
           &.#{$preName}-open-status {
-            fill: var(#{$prefix}-theme-cyan-active-color);
             transform: rotate(90deg);
           }
         }
@@ -74,7 +114,8 @@ $prefix: --cy-menu;
         padding-left: 8px;
       }
     }
-    
+
+    // 滚动条样式
     &::-webkit-scrollbar {
       width: 4px;
       background-color: #eee;
@@ -82,13 +123,13 @@ $prefix: --cy-menu;
     &::-webkit-scrollbar-thumb {
       border-radius: 2px;
       background-color: #c1c1c1;
-    
+
       &:hover {
-      background-color: #a8a8a8;
+        background-color: #a8a8a8;
       }
-    
+
       &:active {
-      background-color: #787878;
+        background-color: #787878;
       }
     }
     & {
@@ -100,12 +141,13 @@ $prefix: --cy-menu;
 
 // primary主题样式
 .#{$preName}.#{$preName}-theme-primary {
-
+  // 菜单列表
   .#{$preName}-menu-list {
     color: var(#{$prefix}-theme-cyan-text-color);
     background-color: var(#{$prefix}-theme-cyan-bg-color);
-
+    // 菜单项
     .#{$preName}-menu-item {
+      // 菜单项box
       .#{$preName}-menu-item-box {
         border-left: 3px solid transparent;
         border-left-width: initial;
@@ -117,6 +159,15 @@ $prefix: --cy-menu;
           border-left-color: var(#{$prefix}-theme-cyan-active-color);
         }
 
+        // 展开样式
+        &.#{$preName}-open-list {
+          &>.#{$preName}-menu-icon, &>.#{$preName}-menu-text, &>.#{$preName}open-status {
+            color: #fff;
+            fill: #fff;
+          }
+        }
+
+        // 活跃样式
         &.#{$preName}-open-active {
           color: var(#{$prefix}-theme-cyan-active-color);
           border-left-color: var(#{$prefix}-theme-cyan-active-color);
@@ -130,6 +181,11 @@ $prefix: --cy-menu;
             border-left-color: var(#{$prefix}-theme-cyan-active-color);
             transform: translateY(-50%);
             transition: border .3s ease-in-out;
+          }
+
+          &>.#{$preName}-menu-icon, &>.#{$preName}-menu-text, &>.#{$preName}-active-status {
+            color: var(#{$prefix}-theme-cyan-active-color);
+            fill: var(#{$prefix}-theme-cyan-active-color);
           }
         }
       }
@@ -169,12 +225,18 @@ $prefix: --cy-menu;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.329);
     border-radius: 2px;
     background-color: var(#{$prefix}-popover-color);
+
+    .#{$preName}-popover-label {
+      display: block;
+      white-space: nowrap;
+      padding: 10px;
+    }
   }
 }
 
 .popover-enter-active,
 .popover-leave-active {
-  transition: all .5s;
+  transition: all .2s;
 }
 
 .popover-enter-from,

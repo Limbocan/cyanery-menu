@@ -18,7 +18,9 @@ const MenuListProps = {
     default: 0
   },
   // 菜单项插槽
-  itemSlot: {}
+  itemSlot: {},
+  // 图标插槽
+  iconSlot: {},
 }
 
 // 组件
@@ -32,15 +34,15 @@ export const MenuListComponent = defineComponent({
       globalState.saveMenus(MENU_LIST)
       return MENU_LIST.map(m => h(
         MenuItem,
-        { data: m, diff: props.diff + 1, itemSlot: props.itemSlot },
+        { data: m, diff: props.diff + 1, itemSlot: props.itemSlot, iconSlot: props.iconSlot },
       ))
     })
 
-    const formatList = (list) => {
+    const formatList = (list, deep = 0) => {
       return list.map(m => {
         const ITEM = { ...m }
-        if (m.children) ITEM.children = formatList(m.children)
-        return { ...ITEM, key: ITEM.key ?? ITEM.path }
+        if (m.children) ITEM.children = formatList(m.children, deep + 1)
+        return { ...ITEM, key: ITEM.key ?? ITEM.path, deep }
       })
     }
 

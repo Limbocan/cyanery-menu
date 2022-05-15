@@ -1,5 +1,6 @@
 <template>
   <div
+    :class="getClassFomat('popover-template')"
     @mouseenter="mouseenter"
     @mouseleave="mouseleave"
   >
@@ -60,7 +61,7 @@ const popoverStyle = computed(() => {
 const closePopover = () => {
   setTimeout(() => {
     if (!popover.value.stopClose) popover.value.show = false
-  }, 300)
+  }, 200)
 }
 
 // 鼠标移入菜单项

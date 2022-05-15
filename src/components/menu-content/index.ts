@@ -1,5 +1,5 @@
 
-import { defineComponent, h, ref, computed } from 'vue'
+import { defineComponent, h, ref, computed, watch } from 'vue'
 import { MenuListComponent } from '../menu-list/index'
 import { MenuToggleComponent } from '../menu-toggle/index'
 import { getStyleFormat, getClassFomat } from 'src/utils/use-style'
@@ -19,6 +19,21 @@ export const Menu = defineComponent({
 
     // 菜单是否展开显示
     const isOpen = ref(props.open ?? true)
+
+    // 监听收起菜单
+    watch(
+      () => props.open,
+      (val) => {
+        if (val === false) globalState.closeAllMenu()
+      }
+    )
+    // 监听当前活跃菜单项
+    watch(
+      () => props.modelValue,
+      (key) => {
+        globalState.pushActiveMenu(key)
+      }
+    )
 
     // 菜单DOM内容
     const childDomList = computed(() => {
@@ -40,7 +55,7 @@ export const Menu = defineComponent({
       // 菜单列表组件
       const ListDom = h(
         MenuListComponent,
-        { menuList: props.data, itemSlot: slots.menuItem }
+        { menuList: props.data, itemSlot: slots.menuItem, iconSlot: slots.icon }
       )
       // 菜单尾部
       const bottomSlot = props.footerRender ? 
@@ -62,7 +77,7 @@ export const Menu = defineComponent({
     return () => h(
       'div',
       {
-        class: 'cy-menu ' + getClassFomat(props.className + ` theme-${props.theme}`),
+        class: 'cy-menu ' + getClassFomat(props.className + ` theme-${props.theme} ${(props.open ?? isOpen.value) ? 'open-status' : 'close-status'}`),
         style: getStyleFormat([
           { prop: 'width', val: props.width, type: 'num' },
           { prop: 'theme-cyan-bg-color', val: props.backgroundColor, type: 'color' },

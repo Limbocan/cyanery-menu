@@ -1,4 +1,8 @@
 export declare const Menu: import("vue").DefineComponent<{
+    modelValue: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     data: {
         type: import("vue").PropType<import("../../types").MenuItemProps[]>;
         default: () => any[];
@@ -22,6 +26,14 @@ export declare const Menu: import("vue").DefineComponent<{
     unique: {
         type: import("vue").PropType<boolean>;
         default: boolean;
+    };
+    showIcon: {
+        type: import("vue").PropType<boolean>;
+        default: boolean;
+    };
+    offset: {
+        type: import("vue").PropType<number>;
+        default: number;
     };
     theme: {
         type: import("vue").PropType<string>;
@@ -46,6 +58,10 @@ export declare const Menu: import("vue").DefineComponent<{
 }, () => import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
     [key: string]: any;
 }>, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, string[], string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+    modelValue: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     data: {
         type: import("vue").PropType<import("../../types").MenuItemProps[]>;
         default: () => any[];
@@ -69,6 +85,14 @@ export declare const Menu: import("vue").DefineComponent<{
     unique: {
         type: import("vue").PropType<boolean>;
         default: boolean;
+    };
+    showIcon: {
+        type: import("vue").PropType<boolean>;
+        default: boolean;
+    };
+    offset: {
+        type: import("vue").PropType<number>;
+        default: number;
     };
     theme: {
         type: import("vue").PropType<string>;
@@ -94,11 +118,14 @@ export declare const Menu: import("vue").DefineComponent<{
     [x: string & `on${string}`]: (...args: any[]) => any;
 }, {
     data: import("../../types").MenuItemProps[];
+    modelValue: string;
     className: string;
     width: string | number;
     open: boolean;
     toggleButton: boolean;
     unique: boolean;
+    showIcon: boolean;
+    offset: number;
     theme: string;
     backgroundColor: string;
     activeColor: string;
