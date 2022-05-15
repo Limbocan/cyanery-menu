@@ -40,10 +40,22 @@ export const MenuProps = {
     type: Boolean as PropType<boolean>,
     default: false
   },
+  // 展开菜单方式
+  trigger: {
+    type: String as PropType<string>,
+    default: 'click'
+  },
+  // 展示菜单图标
   showIcon: {
     type: Boolean as PropType<boolean>,
     default: true
   },
+  // 菜单收起宽度
+  closeWidth: {
+    type: String as PropType<string>,
+    default: '44px'
+  },
+  // 次级菜单缩进（单位像素）
   offset: {
     type: Number as PropType<number>,
     default: 6
@@ -117,7 +129,6 @@ class GlobalState {
   // 设置当前活跃菜单项
   pushActiveMenu(key) {
     this.state.activeMenu = this.getActiveMenu(key, this.state.allMenus)
-    console.log(key, this.state.activeMenu)
   }
   // 获取活跃菜单项
   getActiveMenu(key, menus, deep = 0, result = []) {

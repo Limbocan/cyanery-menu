@@ -18,7 +18,7 @@ $prefix: --cy-menu;
 
   // 菜单收起状态样式
   &.#{$preName}-close-status {
-    width: 46px;
+    width: var(#{$prefix}-close-width);
     // 非一级菜单隐藏菜单图标
     .#{$preName}-menu-list:not(.#{$preName}-list-child-0) {
       .#{$preName}-menu-icon {
@@ -81,17 +81,18 @@ $prefix: --cy-menu;
         cursor: pointer;
         text-overflow: ellipsis;
         overflow: hidden;
-        transition: background .3s ease-in-out, border .3s ease-in-out;
+        transition: background .3s ease-in-out, border .3s ease-in-out, color .3s ease-in-out;
 
         // 菜单图标
         .#{$preName}-menu-icon {
           fill: var(#{$prefix}-theme-cyan-text-color);
-          min-width: 20px;
-          width: 20px;
-          height: 20px;
+          min-width: 22px;
+          width: 22px;
+          height: 22px;
           padding: 0 4px;
           margin-right: 6px;
         }
+        // .#{$preName}-meun-text {}
         // 展开/收起图标
         .#{$preName}-col-icon {
           fill: var(#{$prefix}-theme-cyan-text-color);

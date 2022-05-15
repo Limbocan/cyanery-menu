@@ -27,9 +27,17 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<boolean>;
         default: boolean;
     };
+    trigger: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     showIcon: {
         type: import("vue").PropType<boolean>;
         default: boolean;
+    };
+    closeWidth: {
+        type: import("vue").PropType<string>;
+        default: string;
     };
     offset: {
         type: import("vue").PropType<number>;
@@ -86,9 +94,17 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<boolean>;
         default: boolean;
     };
+    trigger: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     showIcon: {
         type: import("vue").PropType<boolean>;
         default: boolean;
+    };
+    closeWidth: {
+        type: import("vue").PropType<string>;
+        default: string;
     };
     offset: {
         type: import("vue").PropType<number>;
@@ -124,7 +140,9 @@ export declare const Menu: import("vue").DefineComponent<{
     open: boolean;
     toggleButton: boolean;
     unique: boolean;
+    trigger: string;
     showIcon: boolean;
+    closeWidth: string;
     offset: number;
     theme: string;
     backgroundColor: string;

@@ -29,9 +29,17 @@ export declare const MenuProps: {
         type: PropType<boolean>;
         default: boolean;
     };
+    trigger: {
+        type: PropType<string>;
+        default: string;
+    };
     showIcon: {
         type: PropType<boolean>;
         default: boolean;
+    };
+    closeWidth: {
+        type: PropType<string>;
+        default: string;
     };
     offset: {
         type: PropType<number>;

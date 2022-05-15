@@ -1,6 +1,7 @@
 
-import { defineComponent, h, ref, computed, watch } from 'vue'
+import { defineComponent, h, ref, computed, watch, onMounted } from 'vue'
 import { MenuListComponent } from '../menu-list/index'
+import { componentConfig } from '../../utils/enum'
 import { MenuToggleComponent } from '../menu-toggle/index'
 import { getStyleFormat, getClassFomat } from 'src/utils/use-style'
 import { MenuProps, MenuEmits, globalState } from '../../menu-props'
@@ -23,17 +24,35 @@ export const Menu = defineComponent({
     // 监听收起菜单
     watch(
       () => props.open,
-      (val) => {
-        if (val === false) globalState.closeAllMenu()
-      }
+      (val) => { if (val === false) globalState.closeAllMenu() }
     )
     // 监听当前活跃菜单项
     watch(
       () => props.modelValue,
-      (key) => {
-        globalState.pushActiveMenu(key)
-      }
+      (key) => globalState.pushActiveMenu(key)
     )
+    onMounted(() => {
+      // 监听菜单触发方式
+      watch(
+        () => props.trigger,
+        (val) => {
+          const MENU_DOM = document.querySelector(`.${componentConfig.mainClass}`)
+          if (val === 'hover') {
+            globalState.menuEmitsMethod('update:open', false)
+            MENU_DOM.addEventListener('mouseenter', changeOpen)
+            MENU_DOM.addEventListener('mouseleave', changeOpen)
+          } else {
+            MENU_DOM.removeEventListener('mouseenter', changeOpen)
+            MENU_DOM.removeEventListener('mouseleave', changeOpen)
+          }
+        },
+        { immediate: true }
+      )
+    })
+    const changeOpen = () => {
+      if (props.open === true) globalState.menuEmitsMethod('update:open', false)
+      else globalState.menuEmitsMethod('update:open', true)
+    }
 
     // 菜单DOM内容
     const childDomList = computed(() => {
@@ -77,9 +96,11 @@ export const Menu = defineComponent({
     return () => h(
       'div',
       {
-        class: 'cy-menu ' + getClassFomat(props.className + ` theme-${props.theme} ${(props.open ?? isOpen.value) ? 'open-status' : 'close-status'}`),
+        class: `${componentConfig.mainClass} ` + getClassFomat(props.className +
+          ` theme-${props.theme} ${(props.open ?? isOpen.value) ? 'open-status' : 'close-status'}`),
         style: getStyleFormat([
           { prop: 'width', val: props.width, type: 'num' },
+          { prop: 'close-width', val: props.closeWidth, type: 'num' },
           { prop: 'theme-cyan-bg-color', val: props.backgroundColor, type: 'color' },
           { prop: 'theme-cyan-active-color', val: props.activeColor, type: 'color' },
           { prop: 'theme-cyan-text-color', val: props.textColor, type: 'color' }
