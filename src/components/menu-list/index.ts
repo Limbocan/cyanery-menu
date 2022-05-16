@@ -13,7 +13,7 @@ const MenuListProps = {
     default: () => []
   },
   // 菜单层级
-  diff: {
+  deep: {
     type: Number as PropType<number>,
     default: 0
   },
@@ -34,11 +34,11 @@ export const MenuListComponent = defineComponent({
       globalState.saveMenus(MENU_LIST)
       return MENU_LIST.map(m => h(
         MenuItem,
-        { data: m, diff: props.diff + 1, itemSlot: props.itemSlot, iconSlot: props.iconSlot },
+        { data: m, deep: props.deep + 1, itemSlot: props.itemSlot, iconSlot: props.iconSlot },
       ))
     })
 
-    const formatList = (list, deep = 0) => {
+    const formatList = (list, deep = 1) => {
       return list.map(m => {
         const ITEM = { ...m }
         if (m.children) ITEM.children = formatList(m.children, deep + 1)
@@ -46,6 +46,6 @@ export const MenuListComponent = defineComponent({
       })
     }
 
-    return () => h(MenuChildList, { child: MENU_NODE.value, diff: props.diff, open: true })
+    return () => h(MenuChildList, { child: MENU_NODE.value, deep: props.deep, open: true })
   }
 })

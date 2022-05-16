@@ -28,9 +28,9 @@
                 :is="props.iconSlot || globalState.state.MenuPropsData.iconRender"
                 :data="props.data"
                 :open="isOpen"
-                :diff="props.diff"
+                :deep="props.deep"
               />
-              <MenuIcon v-else-if="globalState.state.MenuPropsData.showIcon && props.diff === 1" />
+              <MenuIcon v-else-if="globalState.state.MenuPropsData.showIcon && props.deep === 1" />
             </div>
             <span :class="getClassFomat('menu-text')">{{ props.data.name }}</span>
             <svg
@@ -53,7 +53,7 @@
         <ChildList
           v-if="hasChild"
           :child="child"
-          :diff="props.diff"
+          :deep="props.deep"
           :open="true"
           :is-popover="true"
         />
@@ -64,7 +64,7 @@
     <template v-if="hasChild && !props.isPopover">
       <ChildList
         :child="child"
-        :diff="props.diff"
+        :deep="props.deep"
         :open="isOpen"
       />
     </template>
@@ -88,7 +88,7 @@ const props = defineProps({
     default: ''
   },
   // 菜单层级
-  diff: {
+  deep: {
     type: Number as PropType<number>,
     default: 0
   },
@@ -105,23 +105,25 @@ const props = defineProps({
 
 // 菜单打开状态
 const isOpen = computed(() => {
-  return globalState.state.openedMenus.findIndex(m => m.key === props.data.key && m.diff === props.diff) > -1
+  return globalState.state.openedMenus.findIndex(m => m.key === props.data.key && m.deep === props.deep) > -1
 })
 // 是否为活跃菜单
 const isActive = computed(() => {
-  return globalState.state.activeMenu.includes(props.data.key)
+  return globalState.state.activeMenus.includes(props.data.key)
 })
 // 是否有子菜单
 const hasChild = ref(props.data.children && props.data.children.length > 0)
 // 菜单点击事件
 const menuClick = () => {
-  if (!hasChild.value) globalState.menuEmitsMethod('update:modelValue', props.data.key)
+  if (props.data.disabled) return false
+  if (!hasChild.value) {
+    if (globalState.state.MenuPropsData.modelValue === undefined) globalState.pushActiveMenu(props.data.key)
+    globalState.menuEmitsMethod('update:modelValue', props.data.key)
+  }
   if (hasChild.value && !props.isPopover && globalState.state.MenuPropsData.open !== false) {
-    // isOpen.value = !isOpen.value
     const CURR_ITEM = { ...props.data }
-    delete CURR_ITEM.children
-    if (!isOpen.value) globalState.pushMenu({ ...CURR_ITEM, diff: props.diff })
-    else globalState.remove({ ...CURR_ITEM, diff: props.diff })
+    if (!isOpen.value) globalState.pushMenu(CURR_ITEM)
+    else globalState.remove(CURR_ITEM)
   }
   globalState.menuEmitsMethod('menu-click', props.data)
 }
@@ -130,19 +132,20 @@ const className = computed(() => {
   let CLASS_STR = ''
   CLASS_STR += isOpen.value ? 'open-list ' : ''
   CLASS_STR += isActive.value ? 'open-active ' : ''
+  CLASS_STR += props.data.disabled ? 'menu-disabled ' : ''
   return CLASS_STR
 })
 // 菜单项样式
 const boxStyle = computed(() => {
   return {
-    'padding-left': props.isPopover ? null : props.diff * globalState.state.MenuPropsData.offset + 'px'
+    'padding-left': props.isPopover ? null : props.deep * globalState.state.MenuPropsData.offset + 'px'
   }
 })
 // 子菜单项列表
 const childList = ref(hasChild.value ? props.data.children : [])
 // 子菜单项渲染列表
 const child = computed(() => childList.value.map((c) => {
-  return h(MenuItem, { data: c, diff: props.diff + 1, itemSlot: props.itemSlot })
+  return h(MenuItem, { data: c, deep: props.deep + 1, itemSlot: props.itemSlot })
 }))
 
 </script>

@@ -1,4 +1,4 @@
-import { defineComponent, openBlock, createBlock, Transition, mergeProps, toHandlers, withCtx, withDirectives, createElementVNode, normalizeClass, createElementBlock, Fragment, renderList, resolveDynamicComponent, vShow, reactive, h, ref, computed, unref, renderSlot, createVNode, normalizeStyle, nextTick, createCommentVNode, toDisplayString, watch, onMounted } from 'vue';
+import { defineComponent, openBlock, createBlock, Transition, mergeProps, toHandlers, withCtx, withDirectives, createElementVNode, normalizeClass, createElementBlock, Fragment, renderList, resolveDynamicComponent, vShow, reactive, computed, nextTick, h, ref, unref, renderSlot, createVNode, normalizeStyle, createCommentVNode, toDisplayString, watch, onMounted } from 'vue';
 
 const withInstall = (main, extra) => {
     main.install = (app) => {
@@ -20,7 +20,6 @@ var componentConfig;
     componentConfig["stylePrefix"] = "--cy-menu-";
     componentConfig["classPrefix"] = "cy-menu-";
 })(componentConfig || (componentConfig = {}));
-
 const getStyleFormat = (style) => {
     const styleOption = {};
     style.forEach(s => {
@@ -120,7 +119,7 @@ const listProps = {
         type: Array,
         default: () => []
     },
-    diff: {
+    deep: {
         type: Number,
         default: 0
     },
@@ -199,7 +198,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock(Transition, mergeProps({ name: "collapse" }, toHandlers(_ctx.listeners)), {
     default: withCtx(() => [
       withDirectives(createElementVNode("ul", {
-        class: normalizeClass(_ctx.getClassFomat(`menu-list list-child-${_ctx.props.diff} ${_ctx.props.open ? 'toggle-open' : 'toggle-close'}`))
+        class: normalizeClass(_ctx.getClassFomat(`menu-list list-child-${_ctx.props.deep} ${_ctx.props.open ? 'toggle-open' : 'toggle-close'}`))
       }, [
         (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.props.child, (item) => {
           return (openBlock(), createBlock(resolveDynamicComponent(item), {
@@ -222,8 +221,8 @@ const RenderProp = [String, Function];
 
 const MenuProps = {
     modelValue: {
-        type: String,
-        default: '',
+        type: String || undefined,
+        default: undefined,
     },
     data: {
         type: Array,
@@ -297,7 +296,8 @@ class GlobalState {
         this.state = reactive({
             allMenus: [],
             openedMenus: [],
-            activeMenu: [],
+            activeMenuKey: '',
+            activeMenus: computed(() => this.getActiveMenus(this.state.activeMenuKey, this.state.allMenus)),
             MenuPropsData: {},
             menuEmitFn: null
         });
@@ -317,10 +317,13 @@ class GlobalState {
         if (menus instanceof Array)
             this.state.allMenus = menus;
     }
-    pushActiveMenu(key) {
-        this.state.activeMenu = this.getActiveMenu(key, this.state.allMenus);
+    pushActiveMenu(key, watch) {
+        this.state.activeMenuKey = key;
+        nextTick(() => {
+            this.setActiveOpen(this.state.allMenus, this.state.activeMenus);
+        });
     }
-    getActiveMenu(key, menus, deep = 0, result = []) {
+    getActiveMenus(key, menus, deep = 0, result = []) {
         for (let i = 0; i < menus.length; i++) {
             if (result[result.length - 1] === key)
                 break;
@@ -330,22 +333,53 @@ class GlobalState {
                 result.splice(deep + 1);
                 break;
             }
-            else if (ITEM.children && ITEM.children.length) {
-                this.getActiveMenu(key, ITEM.children, deep + 1, result);
-            }
+            else if (ITEM.children && ITEM.children.length)
+                this.getActiveMenus(key, ITEM.children, deep + 1, result);
         }
+        if (result[result.length - 1] !== key)
+            return [];
         return result;
     }
+    setActiveOpen(menus, openKeys) {
+        openKeys.forEach(key => {
+            const MENU = this.findMenuItem(menus, key);
+            const INDEX = this.state.openedMenus.findIndex(m => m.key === MENU.key && m.deep === MENU.deep);
+            if (INDEX < 0)
+                this.pushMenu(MENU);
+        });
+    }
+    findMenuItem(menus = this.state.allMenus, key) {
+        const result = [];
+        for (let i = 0; i < menus.length; i++) {
+            const MENU = menus[i];
+            if (result.length > 0)
+                break;
+            else if (MENU.key === key) {
+                result.push(MENU);
+                break;
+            }
+            else if (result.length === 0 && MENU.children && MENU.children.length > 0) {
+                const TEMP = this.findMenuItem(MENU.children, key);
+                TEMP.key ? result.push(this.findMenuItem(MENU.children, key)) : null;
+            }
+        }
+        return result[0] || {};
+    }
     pushMenu(menu) {
-        if (this.state.MenuPropsData.unique) {
-            const DIFF_INDEX = this.state.openedMenus.findIndex(m => m.diff === menu.diff);
+        const hasChild = menu.children && menu.children.length > 0;
+        if (this.state.MenuPropsData.unique && hasChild) {
+            const DIFF_INDEX = this.state.openedMenus.findIndex(m => m.deep === menu.deep);
             if (DIFF_INDEX > -1)
                 this.state.openedMenus.splice(DIFF_INDEX, 1);
         }
-        this.state.openedMenus.push(menu);
+        if (hasChild) {
+            const CURR_ITEM = { ...menu };
+            delete CURR_ITEM.children;
+            this.state.openedMenus.push(CURR_ITEM);
+        }
     }
     remove(menu) {
-        const INDEX = this.state.openedMenus.findIndex(m => m.key === menu.key && m.diff === menu.diff);
+        const INDEX = this.state.openedMenus.findIndex(m => m.key === menu.key && m.deep === menu.deep);
         this.state.openedMenus.splice(INDEX, 1);
     }
     closeAllMenu() {
@@ -475,7 +509,7 @@ var script = defineComponent({
             type: Object,
             default: ''
         },
-        diff: {
+        deep: {
             type: Number,
             default: 0
         },
@@ -489,22 +523,26 @@ var script = defineComponent({
     setup(__props) {
         const props = __props;
         const isOpen = computed(() => {
-            return globalState.state.openedMenus.findIndex(m => m.key === props.data.key && m.diff === props.diff) > -1;
+            return globalState.state.openedMenus.findIndex(m => m.key === props.data.key && m.deep === props.deep) > -1;
         });
         const isActive = computed(() => {
-            return globalState.state.activeMenu.includes(props.data.key);
+            return globalState.state.activeMenus.includes(props.data.key);
         });
         const hasChild = ref(props.data.children && props.data.children.length > 0);
         const menuClick = () => {
-            if (!hasChild.value)
+            if (props.data.disabled)
+                return false;
+            if (!hasChild.value) {
+                if (globalState.state.MenuPropsData.modelValue === undefined)
+                    globalState.pushActiveMenu(props.data.key);
                 globalState.menuEmitsMethod('update:modelValue', props.data.key);
+            }
             if (hasChild.value && !props.isPopover && globalState.state.MenuPropsData.open !== false) {
                 const CURR_ITEM = { ...props.data };
-                delete CURR_ITEM.children;
                 if (!isOpen.value)
-                    globalState.pushMenu({ ...CURR_ITEM, diff: props.diff });
+                    globalState.pushMenu(CURR_ITEM);
                 else
-                    globalState.remove({ ...CURR_ITEM, diff: props.diff });
+                    globalState.remove(CURR_ITEM);
             }
             globalState.menuEmitsMethod('menu-click', props.data);
         };
@@ -512,16 +550,17 @@ var script = defineComponent({
             let CLASS_STR = '';
             CLASS_STR += isOpen.value ? 'open-list ' : '';
             CLASS_STR += isActive.value ? 'open-active ' : '';
+            CLASS_STR += props.data.disabled ? 'menu-disabled ' : '';
             return CLASS_STR;
         });
         const boxStyle = computed(() => {
             return {
-                'padding-left': props.isPopover ? null : props.diff * globalState.state.MenuPropsData.offset + 'px'
+                'padding-left': props.isPopover ? null : props.deep * globalState.state.MenuPropsData.offset + 'px'
             };
         });
         const childList = ref(hasChild.value ? props.data.children : []);
         const child = computed(() => childList.value.map((c) => {
-            return h(script, { data: c, diff: props.diff + 1, itemSlot: props.itemSlot });
+            return h(script, { data: c, deep: props.deep + 1, itemSlot: props.itemSlot });
         }));
         return (_ctx, _cache) => {
             return (openBlock(), createElementBlock("li", {
@@ -555,9 +594,9 @@ var script = defineComponent({
                                                 key: 0,
                                                 data: props.data,
                                                 open: unref(isOpen),
-                                                diff: props.diff
-                                            }, null, 8, ["data", "open", "diff"]))
-                                            : (unref(globalState).state.MenuPropsData.showIcon && props.diff === 1)
+                                                deep: props.deep
+                                            }, null, 8, ["data", "open", "deep"]))
+                                            : (unref(globalState).state.MenuPropsData.showIcon && props.deep === 1)
                                                 ? (openBlock(), createBlock(script$2, { key: 1 }))
                                                 : createCommentVNode("v-if", true)
                                     ], 2), [
@@ -584,10 +623,10 @@ var script = defineComponent({
                             ? (openBlock(), createBlock(script$3, {
                                 key: 0,
                                 child: unref(child),
-                                diff: props.diff,
+                                deep: props.deep,
                                 open: true,
                                 "is-popover": true
-                            }, null, 8, ["child", "diff"]))
+                            }, null, 8, ["child", "deep"]))
                             : (openBlock(), createElementBlock("span", {
                                 key: 1,
                                 class: normalizeClass(unref(getClassFomat)('popover-label'))
@@ -600,9 +639,9 @@ var script = defineComponent({
                     ? (openBlock(), createBlock(script$3, {
                         key: 0,
                         child: unref(child),
-                        diff: props.diff,
+                        deep: props.deep,
                         open: unref(isOpen)
-                    }, null, 8, ["child", "diff", "open"]))
+                    }, null, 8, ["child", "deep", "open"]))
                     : createCommentVNode("v-if", true)
             ], 2));
         };
@@ -616,7 +655,7 @@ const MenuListProps = {
         type: Array,
         default: () => []
     },
-    diff: {
+    deep: {
         type: Number,
         default: 0
     },
@@ -630,9 +669,9 @@ const MenuListComponent = defineComponent({
         const MENU_NODE = computed(() => {
             const MENU_LIST = formatList([...props.menuList]);
             globalState.saveMenus(MENU_LIST);
-            return MENU_LIST.map(m => h(script, { data: m, diff: props.diff + 1, itemSlot: props.itemSlot, iconSlot: props.iconSlot }));
+            return MENU_LIST.map(m => h(script, { data: m, deep: props.deep + 1, itemSlot: props.itemSlot, iconSlot: props.iconSlot }));
         });
-        const formatList = (list, deep = 0) => {
+        const formatList = (list, deep = 1) => {
             return list.map(m => {
                 const ITEM = { ...m };
                 if (m.children)
@@ -640,7 +679,7 @@ const MenuListComponent = defineComponent({
                 return { ...ITEM, key: ITEM.key ?? ITEM.path, deep };
             });
         };
-        return () => h(script$3, { child: MENU_NODE.value, diff: props.diff, open: true });
+        return () => h(script$3, { child: MENU_NODE.value, deep: props.deep, open: true });
     }
 });
 
@@ -684,7 +723,7 @@ const Menu = defineComponent({
         const isOpen = ref(props.open ?? true);
         watch(() => props.open, (val) => { if (val === false)
             globalState.closeAllMenu(); });
-        watch(() => props.modelValue, (key) => globalState.pushActiveMenu(key));
+        watch(() => props.modelValue, (key) => globalState.pushActiveMenu(key, true), { immediate: true });
         onMounted(() => {
             watch(() => props.trigger, (val) => {
                 const MENU_DOM = document.querySelector(`.${componentConfig.mainClass}`);
@@ -699,12 +738,7 @@ const Menu = defineComponent({
                 }
             }, { immediate: true });
         });
-        const changeOpen = () => {
-            if (props.open === true)
-                globalState.menuEmitsMethod('update:open', false);
-            else
-                globalState.menuEmitsMethod('update:open', true);
-        };
+        const changeOpen = () => globalState.menuEmitsMethod('update:open', !props.open);
         const childDomList = computed(() => {
             const headerSlot = props.headerRender ?
                 h(props.headerRender) :
@@ -736,9 +770,9 @@ const Menu = defineComponent({
             style: getStyleFormat([
                 { prop: 'width', val: props.width, type: 'num' },
                 { prop: 'close-width', val: props.closeWidth, type: 'num' },
-                { prop: 'theme-cyan-bg-color', val: props.backgroundColor, type: 'color' },
-                { prop: 'theme-cyan-active-color', val: props.activeColor, type: 'color' },
-                { prop: 'theme-cyan-text-color', val: props.textColor, type: 'color' }
+                { prop: 'theme-bg-color', val: props.backgroundColor, type: 'color' },
+                { prop: 'theme-active-color', val: props.activeColor, type: 'color' },
+                { prop: 'theme-text-color', val: props.textColor, type: 'color' }
             ]),
         }, childDomList.value);
     }
@@ -771,7 +805,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".cy-menu {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: flex-start;\n  height: 100%;\n  width: var(--cy-menu-width);\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2901960784);\n  user-select: none;\n  overflow: hidden;\n  transition: width 0.2s ease-in-out;\n}\n.cy-menu.cy-menu-close-status {\n  width: var(--cy-menu-close-width);\n}\n.cy-menu.cy-menu-close-status .cy-menu-menu-list:not(.cy-menu-list-child-0) .cy-menu-menu-icon {\n  display: none;\n}\n.cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-menu-icon {\n  display: unset;\n}\n.cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-menu-text, .cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-col-icon {\n  display: none;\n}\n.cy-menu.cy-menu-open-status {\n  width: var(--cy-menu-width);\n}\n.cy-menu .cy-menu-toggle-box {\n  position: absolute;\n  right: 0;\n  width: 40px;\n  height: 40px;\n  background-color: aqua;\n}\n.cy-menu .cy-menu-menu-list {\n  position: relative;\n  margin: 0;\n  padding: 0;\n  width: 100%;\n  flex: 1;\n  overflow: auto;\n  transition: height var(--cy-menu-time) ease-in-out, padding-top var(--cy-menu-time) ease-in-out, padding-bottom var(--cy-menu-time) ease-in-out, max-height var(--cy-menu-time) ease-in-out;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item {\n  --cy-menu-time: 0.3s;\n  list-style: none;\n  width: 100%;\n  overflow: hidden;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box {\n  position: relative;\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  padding: 12px 22px 12px 12px;\n  white-space: nowrap;\n  cursor: pointer;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  transition: background 0.3s ease-in-out, border 0.3s ease-in-out, color 0.3s ease-in-out;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-menu-icon {\n  fill: var(--cy-menu-theme-cyan-text-color);\n  min-width: 22px;\n  width: 22px;\n  height: 22px;\n  padding: 0 4px;\n  margin-right: 6px;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-col-icon {\n  fill: var(--cy-menu-theme-cyan-text-color);\n  position: absolute;\n  right: 2px;\n  transition: transform 0.2s linear;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-col-icon.cy-menu-open-status {\n  transform: rotate(90deg);\n}\n.cy-menu .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) {\n  overflow: hidden;\n}\n.cy-menu .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) .cy-menu-menu-item-box {\n  padding-left: 8px;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar {\n  width: 4px;\n  background-color: #eee;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb {\n  border-radius: 2px;\n  background-color: #c1c1c1;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb:hover {\n  background-color: #a8a8a8;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb:active {\n  background-color: #787878;\n}\n.cy-menu .cy-menu-menu-list {\n  scrollbar-width: thin;\n  scrollbar-color: #c1c1c1 #eee;\n}\n\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list {\n  color: var(--cy-menu-theme-cyan-text-color);\n  background-color: var(--cy-menu-theme-cyan-bg-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box {\n  border-left: 3px solid transparent;\n  border-left-width: initial;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.1);\n  border-top: 1px solid rgba(255, 255, 255, 0.05);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover {\n  background-color: rgba(0, 0, 0, 0.1);\n  border-left-color: var(--cy-menu-theme-cyan-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-text, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menuopen-status {\n  color: #fff;\n  fill: #fff;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active {\n  color: var(--cy-menu-theme-cyan-active-color);\n  border-left-color: var(--cy-menu-theme-cyan-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active::before {\n  content: \"\";\n  position: absolute;\n  left: 0;\n  top: 50%;\n  border: 4px solid transparent;\n  border-left-color: var(--cy-menu-theme-cyan-active-color);\n  transform: translateY(-50%);\n  transition: border 0.3s ease-in-out;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-text, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-active-status {\n  color: var(--cy-menu-theme-cyan-active-color);\n  fill: var(--cy-menu-theme-cyan-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) {\n  background-color: #60686a;\n}\n\n.cy-menu-popover {\n  --cy-menu-popover-color: rgba(98, 109, 121, 0.8862745098);\n  position: fixed;\n  left: var(--cy-menu-popover-x);\n  top: var(--cy-menu-popover-y);\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-start;\n  align-items: flex-start;\n}\n.cy-menu-popover .cy-menu-popover-tip {\n  position: absolute;\n  left: 0;\n  top: var(--cy-menu-gap);\n  border: 10px solid transparent;\n  border-right-color: var(--cy-menu-popover-color);\n  margin-left: -4px;\n}\n.cy-menu-popover .cy-menu-popover-content {\n  position: absolute;\n  left: 15px;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.329);\n  border-radius: 2px;\n  background-color: var(--cy-menu-popover-color);\n}\n.cy-menu-popover .cy-menu-popover-content .cy-menu-popover-label {\n  display: block;\n  white-space: nowrap;\n  padding: 10px;\n}\n\n.popover-enter-active,\n.popover-leave-active {\n  transition: all 0.2s;\n}\n\n.popover-enter-from,\n.popover-leave-to {\n  opacity: 0;\n}";
+var css_248z = ".cy-menu.cy-menu-theme-primary .cy-menu-menu-list {\n  color: var(--cy-menu-theme-text-color);\n  background-color: var(--cy-menu-theme-bg-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box {\n  border-left: 3px solid transparent;\n  border-left-width: initial;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.1);\n  border-top: 1px solid rgba(255, 255, 255, 0.05);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover {\n  background-color: rgba(0, 0, 0, 0.1);\n  border-left-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-text, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menuopen-status {\n  color: #fff;\n  fill: #fff;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active {\n  color: var(--cy-menu-theme-active-color);\n  border-left-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active::before {\n  content: \"\";\n  position: absolute;\n  left: 0;\n  top: 50%;\n  border: 4px solid transparent;\n  border-left-color: var(--cy-menu-theme-active-color);\n  transform: translateY(-50%);\n  transition: border 0.3s ease-in-out;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-text, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-active-status {\n  color: var(--cy-menu-theme-active-color);\n  fill: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled {\n  color: #ccc;\n  background-color: #a7b4bf;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-col-icon {\n  fill: #ccc;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) {\n  background-color: #60686a;\n}\n\n.cy-menu {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: flex-start;\n  height: 100%;\n  width: var(--cy-menu-width);\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2901960784);\n  user-select: none;\n  overflow: hidden;\n  transition: width 0.2s ease-in-out;\n}\n.cy-menu.cy-menu-close-status {\n  width: var(--cy-menu-close-width);\n}\n.cy-menu.cy-menu-close-status .cy-menu-menu-list:not(.cy-menu-list-child-0) .cy-menu-menu-icon {\n  display: none;\n}\n.cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-menu-icon {\n  display: unset;\n}\n.cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-menu-text, .cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-col-icon {\n  display: none;\n}\n.cy-menu.cy-menu-open-status {\n  width: var(--cy-menu-width);\n}\n.cy-menu .cy-menu-toggle-box {\n  position: absolute;\n  right: 0;\n  width: 40px;\n  height: 40px;\n  background-color: aqua;\n}\n.cy-menu .cy-menu-menu-list {\n  position: relative;\n  margin: 0;\n  padding: 0;\n  width: 100%;\n  flex: 1;\n  overflow: auto;\n  transition: height var(--cy-menu-time) ease-in-out, padding-top var(--cy-menu-time) ease-in-out, padding-bottom var(--cy-menu-time) ease-in-out, max-height var(--cy-menu-time) ease-in-out;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item {\n  --cy-menu-time: 0.3s;\n  list-style: none;\n  width: 100%;\n  overflow: hidden;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box {\n  position: relative;\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  padding: 12px 22px 12px 12px;\n  white-space: nowrap;\n  cursor: pointer;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  transition: background 0.3s ease-in-out, border 0.3s ease-in-out, color 0.3s ease-in-out;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-menu-icon {\n  fill: var(--cy-menu-theme-text-color);\n  min-width: 22px;\n  width: 22px;\n  height: 22px;\n  padding: 0 4px;\n  margin-right: 6px;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-col-icon {\n  fill: var(--cy-menu-theme-text-color);\n  position: absolute;\n  right: 2px;\n  transition: transform 0.2s linear;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-col-icon.cy-menu-open-status {\n  transform: rotate(90deg);\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled {\n  cursor: not-allowed;\n}\n.cy-menu .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) {\n  overflow: hidden;\n}\n.cy-menu .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) .cy-menu-menu-item-box {\n  padding-left: 8px;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar {\n  width: 4px;\n  background-color: #eee;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb {\n  border-radius: 2px;\n  background-color: #c1c1c1;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb:hover {\n  background-color: #a8a8a8;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb:active {\n  background-color: #787878;\n}\n.cy-menu .cy-menu-menu-list {\n  scrollbar-width: thin;\n  scrollbar-color: #c1c1c1 #eee;\n}\n\n.cy-menu-popover {\n  --cy-menu-popover-color: rgba(98, 109, 121, 0.8862745098);\n  position: fixed;\n  left: var(--cy-menu-popover-x);\n  top: var(--cy-menu-popover-y);\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-start;\n  align-items: flex-start;\n}\n.cy-menu-popover .cy-menu-popover-tip {\n  position: absolute;\n  left: 0;\n  top: var(--cy-menu-gap);\n  border: 10px solid transparent;\n  border-right-color: var(--cy-menu-popover-color);\n  margin-left: -4px;\n}\n.cy-menu-popover .cy-menu-popover-content {\n  position: absolute;\n  left: 15px;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.329);\n  border-radius: 2px;\n  background-color: var(--cy-menu-popover-color);\n}\n.cy-menu-popover .cy-menu-popover-content .cy-menu-popover-label {\n  display: block;\n  white-space: nowrap;\n  padding: 10px;\n}\n\n.popover-enter-active,\n.popover-leave-active {\n  transition: all 0.2s;\n}\n\n.popover-enter-from,\n.popover-leave-to {\n  opacity: 0;\n}";
 styleInject(css_248z);
 
 const CyaneryMenu = withInstall(Menu);

@@ -1,3 +1,8 @@
+export declare enum componentConfig {
+    mainClass = "cy-menu",
+    stylePrefix = "--cy-menu-",
+    classPrefix = "cy-menu-"
+}
 declare type styleFormatProp = {
     prop: String;
     val: any;

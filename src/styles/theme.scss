@@ -1,0 +1,67 @@
+
+// primary主题样式
+.#{$preName}.#{$preName}-theme-primary {
+  // 菜单列表
+  .#{$preName}-menu-list {
+    color: var(#{$prefix}-theme-text-color);
+    background-color: var(#{$prefix}-theme-bg-color);
+    // 菜单项
+    .#{$preName}-menu-item {
+      // 菜单项box
+      .#{$preName}-menu-item-box {
+        border-left: 3px solid transparent;
+        border-left-width: initial;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+          border-left-color: var(#{$prefix}-theme-active-color);
+        }
+
+        // 展开样式
+        &.#{$preName}-open-list {
+          &>.#{$preName}-menu-icon, &>.#{$preName}-menu-text, &>.#{$preName}open-status {
+            color: #fff;
+            fill: #fff;
+          }
+        }
+
+        // 活跃样式
+        &.#{$preName}-open-active {
+          color: var(#{$prefix}-theme-active-color);
+          border-left-color: var(#{$prefix}-theme-active-color);
+
+          &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            border: 4px solid transparent;
+            border-left-color: var(#{$prefix}-theme-active-color);
+            transform: translateY(-50%);
+            transition: border .3s ease-in-out;
+          }
+
+          &>.#{$preName}-menu-icon, &>.#{$preName}-menu-text, &>.#{$preName}-active-status {
+            color: var(#{$prefix}-theme-active-color);
+            fill: var(#{$prefix}-theme-active-color);
+          }
+        }
+        // 禁用样式
+        &.#{$preName}-menu-disabled {
+          color: #ccc;
+          background-color: #a7b4bf;
+          &>.#{$preName}-menu-icon, &>.#{$preName}-col-icon {
+            fill: #ccc;
+          }
+        }
+      }
+    }
+
+    // 子列表
+    &[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
+      background-color: #60686a;
+    }
+  }
+}

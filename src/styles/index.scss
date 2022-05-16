@@ -1,7 +1,6 @@
 // @use "sass:color";
-
-$preName: cy-menu;
-$prefix: --cy-menu;
+@import './variable.scss';
+@import './theme.scss';
 
 .#{$preName} {
   position: relative;
@@ -85,7 +84,7 @@ $prefix: --cy-menu;
 
         // 菜单图标
         .#{$preName}-menu-icon {
-          fill: var(#{$prefix}-theme-cyan-text-color);
+          fill: var(#{$prefix}-theme-text-color);
           min-width: 22px;
           width: 22px;
           height: 22px;
@@ -95,7 +94,7 @@ $prefix: --cy-menu;
         // .#{$preName}-meun-text {}
         // 展开/收起图标
         .#{$preName}-col-icon {
-          fill: var(#{$prefix}-theme-cyan-text-color);
+          fill: var(#{$prefix}-theme-text-color);
           position: absolute;
           right: 2px;
           transition: transform .2s linear;
@@ -103,6 +102,10 @@ $prefix: --cy-menu;
           &.#{$preName}-open-status {
             transform: rotate(90deg);
           }
+        }
+        // 禁用样式
+        &.#{$preName}-menu-disabled {
+          cursor: not-allowed;
         }
       }
     }
@@ -136,65 +139,6 @@ $prefix: --cy-menu;
     & {
       scrollbar-width: thin;
       scrollbar-color: #c1c1c1 #eee;
-    }
-  }
-}
-
-// primary主题样式
-.#{$preName}.#{$preName}-theme-primary {
-  // 菜单列表
-  .#{$preName}-menu-list {
-    color: var(#{$prefix}-theme-cyan-text-color);
-    background-color: var(#{$prefix}-theme-cyan-bg-color);
-    // 菜单项
-    .#{$preName}-menu-item {
-      // 菜单项box
-      .#{$preName}-menu-item-box {
-        border-left: 3px solid transparent;
-        border-left-width: initial;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.1);
-          border-left-color: var(#{$prefix}-theme-cyan-active-color);
-        }
-
-        // 展开样式
-        &.#{$preName}-open-list {
-          &>.#{$preName}-menu-icon, &>.#{$preName}-menu-text, &>.#{$preName}open-status {
-            color: #fff;
-            fill: #fff;
-          }
-        }
-
-        // 活跃样式
-        &.#{$preName}-open-active {
-          color: var(#{$prefix}-theme-cyan-active-color);
-          border-left-color: var(#{$prefix}-theme-cyan-active-color);
-
-          &::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            border: 4px solid transparent;
-            border-left-color: var(#{$prefix}-theme-cyan-active-color);
-            transform: translateY(-50%);
-            transition: border .3s ease-in-out;
-          }
-
-          &>.#{$preName}-menu-icon, &>.#{$preName}-menu-text, &>.#{$preName}-active-status {
-            color: var(#{$prefix}-theme-cyan-active-color);
-            fill: var(#{$prefix}-theme-cyan-active-color);
-          }
-        }
-      }
-    }
-
-    // 子列表
-    &[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
-      background-color: #60686a;
     }
   }
 }

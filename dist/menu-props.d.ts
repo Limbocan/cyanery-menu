@@ -2,8 +2,8 @@ import { PropType } from 'vue';
 import type { MenuItemProps } from './types';
 export declare const MenuProps: {
     modelValue: {
-        type: PropType<string>;
-        default: string;
+        type: PropType<string> | StringConstructor;
+        default: any;
     };
     data: {
         type: PropType<MenuItemProps[]>;
@@ -74,8 +74,10 @@ declare class GlobalState {
     setMenuEmit(emit: any): void;
     menuEmitsMethod(name: any, value: any): void;
     saveMenus(menus: any): void;
-    pushActiveMenu(key: any): void;
-    getActiveMenu(key: any, menus: any, deep?: number, result?: any[]): any[];
+    pushActiveMenu(key: any, watch?: boolean): void;
+    getActiveMenus(key: any, menus: any, deep?: number, result?: any[]): any[];
+    setActiveOpen(menus: any, openKeys: any): void;
+    findMenuItem(menus: any, key: any): any;
     pushMenu(menu: any): void;
     remove(menu: any): void;
     closeAllMenu(): void;

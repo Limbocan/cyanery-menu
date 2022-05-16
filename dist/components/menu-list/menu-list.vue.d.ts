@@ -4,7 +4,7 @@ declare const _default: import("vue").DefineComponent<{
         type: ArrayConstructor;
         default: () => any[];
     };
-    diff: {
+    deep: {
         type: PropType<number>;
         default: number;
     };
@@ -30,7 +30,7 @@ declare const _default: import("vue").DefineComponent<{
             type: ArrayConstructor;
             default: () => any[];
         };
-        diff: {
+        deep: {
             type: PropType<number>;
             default: number;
         };
@@ -51,7 +51,7 @@ declare const _default: import("vue").DefineComponent<{
         type: ArrayConstructor;
         default: () => any[];
     };
-    diff: {
+    deep: {
         type: PropType<number>;
         default: number;
     };
@@ -65,7 +65,7 @@ declare const _default: import("vue").DefineComponent<{
     };
 }>>, {
     child: unknown[];
-    diff: number;
+    deep: number;
     open: boolean;
     isPopover: boolean;
 }>;

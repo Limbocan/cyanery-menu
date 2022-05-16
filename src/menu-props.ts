@@ -1,5 +1,5 @@
 
-import { PropType, reactive } from 'vue'
+import { PropType, reactive, computed, nextTick } from 'vue'
 import { RenderProp } from './types'
 import type { MenuItemProps } from './types'
 
@@ -7,8 +7,8 @@ import type { MenuItemProps } from './types'
 export const MenuProps = {
   // 当前菜单项
   modelValue: {
-    type: String as PropType<string>,
-    default: '',
+    type: String || undefined as PropType<string | undefined>,
+    default: undefined,
   },
   // 菜单项列表
   data: {
@@ -104,7 +104,8 @@ class GlobalState {
     this.state = reactive({
       allMenus: [], // 所有菜单数据
       openedMenus: [], // 打开的菜单项
-      activeMenu: [],
+      activeMenuKey: '', // 当前活跃菜单项
+      activeMenus: computed(() => this. getActiveMenus(this.state.activeMenuKey, this.state.allMenus)),
       MenuPropsData: {}, // 全局组件参数
       menuEmitFn: null // 全局emits方法
     })
@@ -127,11 +128,14 @@ class GlobalState {
     if (menus instanceof Array) this.state.allMenus = menus
   }
   // 设置当前活跃菜单项
-  pushActiveMenu(key) {
-    this.state.activeMenu = this.getActiveMenu(key, this.state.allMenus)
+  pushActiveMenu(key, watch?:boolean) {
+    this.state.activeMenuKey = key
+    nextTick(() => {
+      this.setActiveOpen(this.state.allMenus, this.state.activeMenus)
+    })
   }
-  // 获取活跃菜单项
-  getActiveMenu(key, menus, deep = 0, result = []) {
+  // 获取活跃菜单项list
+   getActiveMenus(key, menus, deep = 0, result = []) {
     for (let i = 0; i < menus.length; i++) {
       if (result[result.length - 1] === key) break
       const ITEM = menus[i]
@@ -139,23 +143,51 @@ class GlobalState {
       if (key === ITEM.key) {
         result.splice(deep + 1)
         break
-      } else if (ITEM.children && ITEM.children.length) {
-        this.getActiveMenu(key, ITEM.children, deep + 1, result)
+      } else if (ITEM.children && ITEM.children.length) this. getActiveMenus(key, ITEM.children, deep + 1, result)
+    }
+    if (result[result.length - 1] !== key) return []
+    return result
+  }
+  // 设置活跃项菜单打开状态
+  setActiveOpen(menus, openKeys) {
+    openKeys.forEach(key => {
+      const MENU = this.findMenuItem(menus, key)
+      const INDEX = this.state.openedMenus.findIndex(m => m.key === MENU.key && m.deep === MENU.deep)
+      if (INDEX < 0) this.pushMenu(MENU)
+    })
+  }
+  // key查找菜单项
+  findMenuItem(menus = this.state.allMenus, key) {
+    const result = []
+    for (let i = 0; i < menus.length; i++) {
+      const MENU = menus[i]
+      if (result.length > 0) break
+      else if (MENU.key === key) {
+        result.push(MENU)
+        break
+      } else if (result.length === 0 && MENU.children && MENU.children.length > 0) {
+        const TEMP = this.findMenuItem(MENU.children, key)
+        TEMP.key ? result.push(this.findMenuItem(MENU.children, key)) : null
       }
     }
-    return result
+    return result[0] || {}
   }
   // 存储打开的菜单项
   pushMenu(menu) {
-    if (this.state.MenuPropsData.unique) {
-      const DIFF_INDEX = this.state.openedMenus.findIndex(m => m.diff === menu.diff)
+    const hasChild = menu.children && menu.children.length > 0
+    if (this.state.MenuPropsData.unique && hasChild) {
+      const DIFF_INDEX = this.state.openedMenus.findIndex(m => m.deep === menu.deep)
       if (DIFF_INDEX > -1) this.state.openedMenus.splice(DIFF_INDEX, 1)
     }
-    this.state.openedMenus.push(menu)
+    if (hasChild) {
+      const CURR_ITEM = { ...menu }
+      delete CURR_ITEM.children
+      this.state.openedMenus.push(CURR_ITEM)
+    }
   }
   // 移除关闭的菜单项
   remove(menu) {
-    const INDEX = this.state.openedMenus.findIndex(m => m.key === menu.key && m.diff === menu.diff)
+    const INDEX = this.state.openedMenus.findIndex(m => m.key === menu.key && m.deep === menu.deep)
     this.state.openedMenus.splice(INDEX, 1)
   }
   // 关闭所有菜单

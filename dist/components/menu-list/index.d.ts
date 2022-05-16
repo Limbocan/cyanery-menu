@@ -5,7 +5,7 @@ export declare const MenuListComponent: import("vue").DefineComponent<{
         type: PropType<MenuItemProps[]>;
         default: () => any[];
     };
-    diff: {
+    deep: {
         type: PropType<number>;
         default: number;
     };
@@ -18,7 +18,7 @@ export declare const MenuListComponent: import("vue").DefineComponent<{
         type: PropType<MenuItemProps[]>;
         default: () => any[];
     };
-    diff: {
+    deep: {
         type: PropType<number>;
         default: number;
     };
@@ -26,5 +26,5 @@ export declare const MenuListComponent: import("vue").DefineComponent<{
     iconSlot: {};
 }>>, {
     menuList: MenuItemProps[];
-    diff: number;
+    deep: number;
 }>;

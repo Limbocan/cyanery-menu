@@ -2,7 +2,7 @@
   <transition name="collapse" v-on="listeners">
     <ul
       v-show="props.open"
-      :class="getClassFomat(`menu-list list-child-${props.diff} ${props.open ? 'toggle-open' : 'toggle-close'}`)"
+      :class="getClassFomat(`menu-list list-child-${props.deep} ${props.open ? 'toggle-open' : 'toggle-close'}`)"
     >
       <template v-for="item in props.child" :key="item">
         <component :is="item" :is-popover="props.isPopover" />
@@ -21,7 +21,7 @@ const listProps = {
     default: () => []
   },
   // 菜单层级
-  diff: {
+  deep: {
     type: Number as PropType<number>,
     default: 0
   },

@@ -1,4 +1,10 @@
-import { componentConfig } from './enum'
+
+// 组件配置
+export enum componentConfig {
+  mainClass = 'cy-menu',
+  stylePrefix = '--cy-menu-',
+  classPrefix = 'cy-menu-'
+}
 
 // style参数
 type styleFormatProp = {

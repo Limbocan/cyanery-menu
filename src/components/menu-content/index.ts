@@ -1,9 +1,8 @@
 
 import { defineComponent, h, ref, computed, watch, onMounted } from 'vue'
 import { MenuListComponent } from '../menu-list/index'
-import { componentConfig } from '../../utils/enum'
 import { MenuToggleComponent } from '../menu-toggle/index'
-import { getStyleFormat, getClassFomat } from 'src/utils/use-style'
+import { componentConfig, getStyleFormat, getClassFomat } from 'src/utils/use-style'
 import { MenuProps, MenuEmits, globalState } from '../../menu-props'
 
 // 组件
@@ -29,7 +28,8 @@ export const Menu = defineComponent({
     // 监听当前活跃菜单项
     watch(
       () => props.modelValue,
-      (key) => globalState.pushActiveMenu(key)
+      (key) => globalState.pushActiveMenu(key, true),
+      { immediate: true }
     )
     onMounted(() => {
       // 监听菜单触发方式
@@ -49,10 +49,7 @@ export const Menu = defineComponent({
         { immediate: true }
       )
     })
-    const changeOpen = () => {
-      if (props.open === true) globalState.menuEmitsMethod('update:open', false)
-      else globalState.menuEmitsMethod('update:open', true)
-    }
+    const changeOpen = () => globalState.menuEmitsMethod('update:open', !props.open)
 
     // 菜单DOM内容
     const childDomList = computed(() => {
@@ -101,9 +98,9 @@ export const Menu = defineComponent({
         style: getStyleFormat([
           { prop: 'width', val: props.width, type: 'num' },
           { prop: 'close-width', val: props.closeWidth, type: 'num' },
-          { prop: 'theme-cyan-bg-color', val: props.backgroundColor, type: 'color' },
-          { prop: 'theme-cyan-active-color', val: props.activeColor, type: 'color' },
-          { prop: 'theme-cyan-text-color', val: props.textColor, type: 'color' }
+          { prop: 'theme-bg-color', val: props.backgroundColor, type: 'color' },
+          { prop: 'theme-active-color', val: props.activeColor, type: 'color' },
+          { prop: 'theme-text-color', val: props.textColor, type: 'color' }
         ]),
       },
       childDomList.value

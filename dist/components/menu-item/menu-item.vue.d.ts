@@ -5,7 +5,7 @@ declare const _default: import("vue").DefineComponent<{
         type: PropType<MenuItemProps>;
         default: string;
     };
-    diff: {
+    deep: {
         type: PropType<number>;
         default: number;
     };
@@ -22,7 +22,7 @@ declare const _default: import("vue").DefineComponent<{
         type: PropType<MenuItemProps>;
         default: string;
     };
-    diff: {
+    deep: {
         type: PropType<number>;
         default: number;
     };
@@ -34,7 +34,7 @@ declare const _default: import("vue").DefineComponent<{
     iconSlot: {};
 }>>, {
     data: MenuItemProps;
-    diff: number;
+    deep: number;
     isPopover: boolean;
 }>;
 export default _default;
