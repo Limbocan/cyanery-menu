@@ -1,12 +1,14 @@
-
 // primary主题样式
-.#{$preName}.#{$preName}-theme-primary {
+.#{$preName}.#{$preName}-theme-normal {
+
   // 菜单列表
   .#{$preName}-menu-list {
     color: var(#{$prefix}-theme-text-color);
     background-color: var(#{$prefix}-theme-bg-color);
+
     // 菜单项
     .#{$preName}-menu-item {
+
       // 菜单项box
       .#{$preName}-menu-item-box {
         border-left: 3px solid transparent;
@@ -21,7 +23,10 @@
 
         // 展开样式
         &.#{$preName}-open-list {
-          &>.#{$preName}-menu-icon, &>.#{$preName}-menu-text, &>.#{$preName}open-status {
+
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-menu-text,
+          &>.#{$preName}-open-status {
             color: #fff;
             fill: #fff;
           }
@@ -43,16 +48,21 @@
             transition: border .3s ease-in-out;
           }
 
-          &>.#{$preName}-menu-icon, &>.#{$preName}-menu-text, &>.#{$preName}-active-status {
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-menu-text,
+          &>.#{$preName}-active-status {
             color: var(#{$prefix}-theme-active-color);
             fill: var(#{$prefix}-theme-active-color);
           }
         }
+
         // 禁用样式
         &.#{$preName}-menu-disabled {
           color: #ccc;
           background-color: #a7b4bf;
-          &>.#{$preName}-menu-icon, &>.#{$preName}-col-icon {
+
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-col-icon {
             fill: #ccc;
           }
         }
@@ -62,6 +72,85 @@
     // 子列表
     &[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
       background-color: #60686a;
+    }
+  }
+}
+
+// primary主题样式
+.#{$preName}.#{$preName}-theme-primary {
+
+  // 一级菜单
+  // .#{$preName}-list-child-0>.#{$preName}-menu-item + .#{$preName}-menu-item {
+  //   margin-top: 4px;
+  // }
+
+  // 菜单列表
+  .#{$preName}-menu-list {
+    color: var(#{$prefix}-theme-text-color);
+    background-color: var(#{$prefix}-theme-bg-color);
+
+    // 菜单项
+    .#{$preName}-menu-item {
+
+      // 菜单项box
+      .#{$preName}-menu-item-box {
+        &:hover {
+          color: var(#{$prefix}-theme-bg-color);
+          background-color: var(#{$prefix}-theme-active-color);
+
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-col-icon {
+            fill: var(#{$prefix}-theme-bg-color);
+          }
+        }
+
+        // 展开样式
+        &.#{$preName}-open-list {
+          background-color: var(#{$prefix}-theme-active-color);
+
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-menu-text,
+          &>.#{$preName}-col-icon {
+            color: var(#{$prefix}-theme-bg-color);
+            fill: var(#{$prefix}-theme-bg-color);
+          }
+        }
+
+        // 活跃样式
+        &.#{$preName}-open-active {
+          color: var(#{$prefix}-theme-text-color);
+          background-color: var(#{$prefix}-theme-active-color);
+
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-menu-text,
+          &>.#{$preName}-active-status {
+            color: var(#{$prefix}-theme-bg-color);
+            fill: var(#{$prefix}-theme-bg-color);
+          }
+        }
+
+        // 禁用样式
+        &.#{$preName}-menu-disabled {
+          color: #e9e9ee;
+
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-col-icon {
+            fill: #e9e9ee;
+          }
+        }
+      }
+
+      .#{$preName}-toggle-open {
+        color: #a2b5f7;
+      }
+    }
+  }
+
+  // 子列表
+  .#{$preName}-menu-list[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
+    background-color: var(#{$prefix}-theme-active-color);
+    .#{$preName}-menu-item-box {
+      padding: 4px;
     }
   }
 }

@@ -3,6 +3,14 @@ export declare enum componentConfig {
     stylePrefix = "--cy-menu-",
     classPrefix = "cy-menu-"
 }
+export declare const themeConfig: {
+    normal: {};
+    primary: {
+        backgroundColor: string;
+        activeColor: string;
+        textColor: string;
+    };
+};
 declare type styleFormatProp = {
     prop: String;
     val: any;

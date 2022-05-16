@@ -80,7 +80,7 @@
         cursor: pointer;
         text-overflow: ellipsis;
         overflow: hidden;
-        transition: background .3s ease-in-out, border .3s ease-in-out, color .3s ease-in-out;
+        transition: background .2s ease-in-out, border .2s ease-in-out, color .2s ease-in-out;
 
         // 菜单图标
         .#{$preName}-menu-icon {
@@ -113,16 +113,12 @@
     // 子列表
     &[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
       overflow: hidden;
-
-      .#{$preName}-menu-item-box {
-        padding-left: 8px;
-      }
     }
 
     // 滚动条样式
     &::-webkit-scrollbar {
       width: 4px;
-      background-color: #eee;
+      background-color: var(#{$prefix}-theme-bg-color);
     }
     &::-webkit-scrollbar-thumb {
       border-radius: 2px;

@@ -2,7 +2,7 @@
 import { defineComponent, h, ref, computed, watch, onMounted } from 'vue'
 import { MenuListComponent } from '../menu-list/index'
 import { MenuToggleComponent } from '../menu-toggle/index'
-import { componentConfig, getStyleFormat, getClassFomat } from 'src/utils/use-style'
+import { componentConfig, themeConfig, getStyleFormat, getClassFomat } from 'src/utils/use-style'
 import { MenuProps, MenuEmits, globalState } from '../../menu-props'
 
 // 组件
@@ -85,6 +85,17 @@ export const Menu = defineComponent({
         bottomSlot
       ]
     })
+    // 菜单样式变量
+    const styleVar = computed(() => {
+      const theme = themeConfig[props.theme]
+      return getStyleFormat([
+        { prop: 'width', val: props.width, type: 'num' },
+        { prop: 'close-width', val: props.closeWidth, type: 'num' },
+        { prop: 'theme-bg-color', val: theme.backgroundColor || props.backgroundColor, type: 'color' },
+        { prop: 'theme-active-color', val: theme.activeColor || props.activeColor, type: 'color' },
+        { prop: 'theme-text-color', val: theme.textColor || props.textColor, type: 'color' }
+      ])
+    })
 
     expose({
       closeAll: () => globalState.closeAllMenu()
@@ -95,13 +106,7 @@ export const Menu = defineComponent({
       {
         class: `${componentConfig.mainClass} ` + getClassFomat(props.className +
           ` theme-${props.theme} ${(props.open ?? isOpen.value) ? 'open-status' : 'close-status'}`),
-        style: getStyleFormat([
-          { prop: 'width', val: props.width, type: 'num' },
-          { prop: 'close-width', val: props.closeWidth, type: 'num' },
-          { prop: 'theme-bg-color', val: props.backgroundColor, type: 'color' },
-          { prop: 'theme-active-color', val: props.activeColor, type: 'color' },
-          { prop: 'theme-text-color', val: props.textColor, type: 'color' }
-        ]),
+        style: styleVar.value,
       },
       childDomList.value
     )

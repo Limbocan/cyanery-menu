@@ -6,6 +6,15 @@ export enum componentConfig {
   classPrefix = 'cy-menu-'
 }
 
+export const themeConfig = {
+  normal: {},
+  primary: {
+    backgroundColor: '#5768f3',
+    activeColor: '#0f25d5',
+    textColor: '#fff'
+  }
+}
+
 // style参数
 type styleFormatProp = {
   prop: String,

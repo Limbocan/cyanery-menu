@@ -63,7 +63,7 @@ export const MenuProps = {
   // 主题
   theme: {
     type: String as PropType<string>,
-    default: 'primary'
+    default: 'normal'
   },
   // 菜单背景色
   backgroundColor: {
