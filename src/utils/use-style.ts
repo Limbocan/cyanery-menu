@@ -9,6 +9,7 @@ export enum componentConfig {
 export const themeConfig = {
   normal: {},
   primary: {
+    closeWidth: '38px',
     backgroundColor: '#5768f3',
     activeColor: '#0f25d5',
     textColor: '#fff'

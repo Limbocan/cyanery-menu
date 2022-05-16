@@ -23,12 +23,15 @@ export const Menu = defineComponent({
     // 监听收起菜单
     watch(
       () => props.open,
-      (val) => { if (val === false) globalState.closeAllMenu() }
+      (val) => {
+        isOpen.value = val
+        if (val === false) globalState.closeAllMenu()
+      }
     )
     // 监听当前活跃菜单项
     watch(
       () => props.modelValue,
-      (key) => globalState.pushActiveMenu(key, true),
+      (key) => globalState.pushActiveMenu(key, isOpen.value),
       { immediate: true }
     )
     onMounted(() => {
@@ -90,7 +93,7 @@ export const Menu = defineComponent({
       const theme = themeConfig[props.theme]
       return getStyleFormat([
         { prop: 'width', val: props.width, type: 'num' },
-        { prop: 'close-width', val: props.closeWidth, type: 'num' },
+        { prop: 'close-width', val: theme.closeWidth || props.closeWidth, type: 'num' },
         { prop: 'theme-bg-color', val: theme.backgroundColor || props.backgroundColor, type: 'color' },
         { prop: 'theme-active-color', val: theme.activeColor || props.activeColor, type: 'color' },
         { prop: 'theme-text-color', val: theme.textColor || props.textColor, type: 'color' }

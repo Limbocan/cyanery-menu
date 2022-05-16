@@ -150,7 +150,12 @@
   .#{$preName}-menu-list[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
     background-color: var(#{$prefix}-theme-active-color);
     .#{$preName}-menu-item-box {
-      padding: 4px;
+      padding-right: 26px;
+    }
+  }
+  .#{$preName}-popover-content {
+    .#{$preName}-menu-item-box {
+      padding: 10px;
     }
   }
 }

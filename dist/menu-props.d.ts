@@ -74,9 +74,9 @@ declare class GlobalState {
     setMenuEmit(emit: any): void;
     menuEmitsMethod(name: any, value: any): void;
     saveMenus(menus: any): void;
-    pushActiveMenu(key: any, watch?: boolean): void;
+    pushActiveMenu(key: any, isOpen?: boolean): void;
     getActiveMenus(key: any, menus: any, deep?: number, result?: any[]): any[];
-    setActiveOpen(menus: any, openKeys: any): void;
+    setActiveOpen(menus: any, openKeys: any, isOpen: any): void;
     findMenuItem(menus: any, key: any): any;
     pushMenu(menu: any): void;
     remove(menu: any): void;

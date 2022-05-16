@@ -6,6 +6,7 @@ export declare enum componentConfig {
 export declare const themeConfig: {
     normal: {};
     primary: {
+        closeWidth: string;
         backgroundColor: string;
         activeColor: string;
         textColor: string;

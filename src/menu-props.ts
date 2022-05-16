@@ -128,10 +128,10 @@ class GlobalState {
     if (menus instanceof Array) this.state.allMenus = menus
   }
   // 设置当前活跃菜单项
-  pushActiveMenu(key, watch?:boolean) {
+  pushActiveMenu(key, isOpen?: boolean) {
     this.state.activeMenuKey = key
     nextTick(() => {
-      this.setActiveOpen(this.state.allMenus, this.state.activeMenus)
+      this.setActiveOpen(this.state.allMenus, this.state.activeMenus, isOpen)
     })
   }
   // 获取活跃菜单项list
@@ -149,11 +149,11 @@ class GlobalState {
     return result
   }
   // 设置活跃项菜单打开状态
-  setActiveOpen(menus, openKeys) {
+  setActiveOpen(menus, openKeys, isOpen) {
     openKeys.forEach(key => {
       const MENU = this.findMenuItem(menus, key)
       const INDEX = this.state.openedMenus.findIndex(m => m.key === MENU.key && m.deep === MENU.deep)
-      if (INDEX < 0) this.pushMenu(MENU)
+      if (INDEX < 0 && isOpen) this.pushMenu(MENU)
     })
   }
   // key查找菜单项
