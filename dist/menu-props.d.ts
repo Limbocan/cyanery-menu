@@ -45,6 +45,14 @@ export declare const MenuProps: {
         type: PropType<number>;
         default: number;
     };
+    alwaysPopover: {
+        type: PropType<boolean>;
+        default: boolean;
+    };
+    arrowType: {
+        type: PropType<string>;
+        default: string;
+    };
     theme: {
         type: PropType<string>;
         default: string;
@@ -58,6 +66,10 @@ export declare const MenuProps: {
         default: string;
     };
     textColor: {
+        type: PropType<string>;
+        default: string;
+    };
+    activeTextCorlor: {
         type: PropType<string>;
         default: string;
     };

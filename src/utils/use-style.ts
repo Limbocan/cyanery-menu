@@ -10,9 +10,10 @@ export const themeConfig = {
   normal: {},
   primary: {
     closeWidth: '38px',
-    backgroundColor: '#5768f3',
-    activeColor: '#0f25d5',
-    textColor: '#fff'
+    backgroundColor: '#223e9c',
+    activeColor: '#2753c0',
+    textColor: '#fff',
+    activeTextCorlor: '#54fdff'
   }
 }
 

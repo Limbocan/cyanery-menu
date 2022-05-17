@@ -75,7 +75,8 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        padding: 12px 22px 12px 12px;
+        padding: 12px 24px 12px 12px;
+        font-size: 14px;
         white-space: nowrap;
         cursor: pointer;
         text-overflow: ellipsis;
@@ -96,7 +97,7 @@
         .#{$preName}-col-icon {
           fill: var(#{$prefix}-theme-text-color);
           position: absolute;
-          right: 2px;
+          right: 4px;
           transition: transform .2s linear;
 
           &.#{$preName}-open-status {
@@ -113,6 +114,9 @@
     // 子列表
     &[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
       overflow: hidden;
+      .#{$preName}-menu-item-box {
+        font-size: 12px;
+      }
     }
 
     // 滚动条样式
@@ -141,7 +145,6 @@
 
 // 浮窗样式
 .#{$preName}-popover {
-  #{$prefix}-popover-color: #626d79e2;
   position: fixed;
   left: var(#{$prefix}-popover-x);
   top: var(#{$prefix}-popover-y);
@@ -156,7 +159,7 @@
     left: 0;
     top: var(#{$prefix}-gap);
     border: 10px solid transparent;
-    border-right-color: var(#{$prefix}-popover-color);
+    border-right-color: var(#{$prefix}-theme-bg-color);
     margin-left: -4px;
   }
 
@@ -165,12 +168,13 @@
     left: 15px;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.329);
     border-radius: 2px;
-    background-color: var(#{$prefix}-popover-color);
+    background-color: var(#{$prefix}-theme-bg-color);
 
     .#{$preName}-popover-label {
       display: block;
       white-space: nowrap;
-      padding: 10px;
+      padding: 12px;
+      font-size: 12px;
     }
   }
 }

@@ -96,7 +96,8 @@ export const Menu = defineComponent({
         { prop: 'close-width', val: theme.closeWidth || props.closeWidth, type: 'num' },
         { prop: 'theme-bg-color', val: theme.backgroundColor || props.backgroundColor, type: 'color' },
         { prop: 'theme-active-color', val: theme.activeColor || props.activeColor, type: 'color' },
-        { prop: 'theme-text-color', val: theme.textColor || props.textColor, type: 'color' }
+        { prop: 'theme-text-color', val: theme.textColor || props.textColor, type: 'color' },
+        { prop: 'theme-active-text-color', val: theme.activeTextCorlor || props.activeTextCorlor, type: 'color' }
       ])
     })
 

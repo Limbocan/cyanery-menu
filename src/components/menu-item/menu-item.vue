@@ -1,7 +1,6 @@
 <template>
   <li :class="getClassFomat('menu-item')">
-  <!-- :disabled="!hasChild || globalState.state.MenuPropsData.open || globalState.state.MenuPropsData.open === undefined" -->
-    <MenuPopover :disabled="(!hasChild && props.isPopover) || globalState.state.MenuPropsData.open || globalState.state.MenuPropsData.open === undefined">
+    <MenuPopover :disabled="popverDisabled">
       <!-- 菜单项（触发浮窗） -->
       <template #trigger>
         <div
@@ -14,6 +13,9 @@
             v-if="props.itemSlot || globalState.state.MenuPropsData.itemRender"
             :is="props.itemSlot || globalState.state.MenuPropsData.itemRender"
             :data="props.data"
+            :active="isActive"
+            :popover="props.isPopover"
+            :disabled="props.data.disabled"
             :open="isOpen"
           />
           <!-- 默认菜单项DOM -->
@@ -27,24 +29,21 @@
                 v-if="props.iconSlot || globalState.state.MenuPropsData.iconRender"
                 :is="props.iconSlot || globalState.state.MenuPropsData.iconRender"
                 :data="props.data"
+                :active="isActive"
                 :open="isOpen"
+                :disabled="props.data.disabled"
                 :deep="props.deep"
               />
               <MenuIcon v-else-if="globalState.state.MenuPropsData.showIcon && props.deep === 1" />
             </div>
             <span :class="getClassFomat('menu-text')">{{ props.data.name }}</span>
-            <svg
+            <MenuIcon
               v-if="hasChild"
               :class="getClassFomat(`col-icon ${isOpen ? 'open-status' : ''} ${isActive ? 'active-status' : ''}`)"
-              viewBox="0 0 1024 1024"
-              version="1.1"
+              :type="globalState.state.MenuPropsData.arrowType"
               width="16"
               height="16"
-            >
-              <path
-                d="M677.888 598.528l-254.464 239.616c-15.872 14.848-38.912 18.944-59.392 11.264-20.48-8.192-33.792-26.624-33.792-47.616V322.56c0-20.992 13.312-39.424 33.792-47.616 6.656-2.56 13.824-4.096 20.992-4.096 14.336 0 28.16 5.12 38.4 15.36l254.464 239.616c10.24 9.728 15.872 23.04 15.872 36.352 0.512 13.824-5.632 26.624-15.872 36.352z"
-              />
-            </svg>
+            />
           </template>
         </div>
       </template>
@@ -120,19 +119,27 @@ const menuClick = () => {
     if (globalState.state.MenuPropsData.modelValue === undefined) globalState.pushActiveMenu(props.data.key)
     globalState.menuEmitsMethod('update:modelValue', props.data.key)
   }
-  if (hasChild.value && !props.isPopover && globalState.state.MenuPropsData.open !== false) {
+  if (hasChild.value && !props.isPopover && globalState.state.MenuPropsData.open !== false &&
+    globalState.state.MenuPropsData.alwaysPopover === false) {
     const CURR_ITEM = { ...props.data }
     if (!isOpen.value) globalState.pushMenu(CURR_ITEM)
     else globalState.remove(CURR_ITEM)
   }
   globalState.menuEmitsMethod('menu-click', props.data)
 }
+// 菜单浮窗禁止条件
+const popverDisabled = computed(() => {
+  if (globalState.state.MenuPropsData.alwaysPopover) return false
+  return (!hasChild.value && props.isPopover) || globalState.state.MenuPropsData.open ||
+    globalState.state.MenuPropsData.open === undefined
+})
 // 菜单样式类
 const className = computed(() => {
   let CLASS_STR = ''
   CLASS_STR += isOpen.value ? 'open-list ' : ''
   CLASS_STR += isActive.value ? 'open-active ' : ''
   CLASS_STR += props.data.disabled ? 'menu-disabled ' : ''
+  CLASS_STR += props.isPopover ? 'is-popover ' : ''
   return CLASS_STR
 })
 // 菜单项样式

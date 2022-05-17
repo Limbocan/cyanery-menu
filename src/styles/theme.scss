@@ -1,4 +1,4 @@
-// primary主题样式
+// normal主题样式
 .#{$preName}.#{$preName}-theme-normal {
 
   // 菜单列表
@@ -74,6 +74,12 @@
       background-color: #60686a;
     }
   }
+  // 浮窗
+  .#{$preName}-popover-content {
+    .#{$preName}-menu-item-box.#{$preName}-is-popover {
+      background-color: var(#{$prefix}-theme-bg-color);
+    }
+  }
 }
 
 // primary主题样式
@@ -94,38 +100,27 @@
 
       // 菜单项box
       .#{$preName}-menu-item-box {
+        padding-top: 12px;
+        padding-bottom: 12px;
         &:hover {
-          color: var(#{$prefix}-theme-bg-color);
+          color: var(#{$prefix}-theme-active-text-color);
           background-color: var(#{$prefix}-theme-active-color);
 
           &>.#{$preName}-menu-icon,
           &>.#{$preName}-col-icon {
-            fill: var(#{$prefix}-theme-bg-color);
-          }
-        }
-
-        // 展开样式
-        &.#{$preName}-open-list {
-          background-color: var(#{$prefix}-theme-active-color);
-
-          &>.#{$preName}-menu-icon,
-          &>.#{$preName}-menu-text,
-          &>.#{$preName}-col-icon {
-            color: var(#{$prefix}-theme-bg-color);
-            fill: var(#{$prefix}-theme-bg-color);
+            fill: var(#{$prefix}-theme-active-text-color);
           }
         }
 
         // 活跃样式
         &.#{$preName}-open-active {
-          color: var(#{$prefix}-theme-text-color);
-          background-color: var(#{$prefix}-theme-active-color);
+          // background-color: var(#{$prefix}-theme-active-color);
 
           &>.#{$preName}-menu-icon,
           &>.#{$preName}-menu-text,
           &>.#{$preName}-active-status {
-            color: var(#{$prefix}-theme-bg-color);
-            fill: var(#{$prefix}-theme-bg-color);
+            color: var(#{$prefix}-theme-active-text-color);
+            fill: var(#{$prefix}-theme-active-text-color);
           }
         }
 
@@ -139,23 +134,40 @@
           }
         }
       }
-
-      .#{$preName}-toggle-open {
-        color: #a2b5f7;
-      }
     }
   }
 
   // 子列表
   .#{$preName}-menu-list[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
-    background-color: var(#{$prefix}-theme-active-color);
-    .#{$preName}-menu-item-box {
+    // background-color: var(#{$prefix}-theme-active-color);
+    & .#{$preName}-popover-template > .#{$preName}-menu-item-box:not(.#{$preName}-is-popover) {
+      padding-top: 8px;
+      padding-bottom: 8px;
       padding-right: 26px;
+      color: #e4e6ec;
+      &::before {
+        content: '';
+        position: absolute;
+        left: 18px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: #0355a3;
+      }
+      &.#{$preName}-open-active::before {
+        background-color: #a2b5f7;
+      }
+      &:hover {
+        color: var(#{$prefix}-theme-active-text-color);
+        background-color: var(#{$prefix}-theme-bg-color);
+      }
     }
   }
+  // 浮窗
   .#{$preName}-popover-content {
-    .#{$preName}-menu-item-box {
-      padding: 10px;
+    .#{$preName}-menu-item-box.#{$preName}-is-popover {
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
   }
 }

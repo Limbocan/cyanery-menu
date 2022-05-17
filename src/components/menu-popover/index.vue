@@ -40,7 +40,7 @@ const props = defineProps({
   }
 })
 // 浮窗
-const initGap = 10
+const initGap = 12
 const popover = ref({
   show: false,
   stopClose: false,

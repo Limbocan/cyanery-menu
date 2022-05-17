@@ -60,6 +60,16 @@ export const MenuProps = {
     type: Number as PropType<number>,
     default: 6
   },
+  // 始终使用popover展示次级菜单
+  alwaysPopover: {
+    type: Boolean as PropType<boolean>,
+    default: false
+  },
+  // 展开箭头图标
+  arrowType: {
+    type: String as PropType<string>,
+    default: 'arrow1'
+  },
   // 主题
   theme: {
     type: String as PropType<string>,
@@ -77,6 +87,11 @@ export const MenuProps = {
   },
   // 菜单主题色
   textColor: {
+    type: String as PropType<string>,
+    default: '#fff'
+  },
+  // 菜单主题文字颜色
+  activeTextCorlor: {
     type: String as PropType<string>,
     default: '#fff'
   },
@@ -105,7 +120,7 @@ class GlobalState {
       allMenus: [], // 所有菜单数据
       openedMenus: [], // 打开的菜单项
       activeMenuKey: '', // 当前活跃菜单项
-      activeMenus: computed(() => this. getActiveMenus(this.state.activeMenuKey, this.state.allMenus)),
+      activeMenus: computed(() => this.getActiveMenus(this.state.activeMenuKey, this.state.allMenus)),
       MenuPropsData: {}, // 全局组件参数
       menuEmitFn: null // 全局emits方法
     })
@@ -131,7 +146,9 @@ class GlobalState {
   pushActiveMenu(key, isOpen?: boolean) {
     this.state.activeMenuKey = key
     nextTick(() => {
-      this.setActiveOpen(this.state.allMenus, this.state.activeMenus, isOpen)
+      if (!this.state.MenuPropsData.alwaysPopover) {
+        this.setActiveOpen(this.state.allMenus, this.state.activeMenus, isOpen)
+      }
     })
   }
   // 获取活跃菜单项list

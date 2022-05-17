@@ -43,6 +43,14 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<number>;
         default: number;
     };
+    alwaysPopover: {
+        type: import("vue").PropType<boolean>;
+        default: boolean;
+    };
+    arrowType: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     theme: {
         type: import("vue").PropType<string>;
         default: string;
@@ -56,6 +64,10 @@ export declare const Menu: import("vue").DefineComponent<{
         default: string;
     };
     textColor: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
+    activeTextCorlor: {
         type: import("vue").PropType<string>;
         default: string;
     };
@@ -110,6 +122,14 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<number>;
         default: number;
     };
+    alwaysPopover: {
+        type: import("vue").PropType<boolean>;
+        default: boolean;
+    };
+    arrowType: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     theme: {
         type: import("vue").PropType<string>;
         default: string;
@@ -123,6 +143,10 @@ export declare const Menu: import("vue").DefineComponent<{
         default: string;
     };
     textColor: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
+    activeTextCorlor: {
         type: import("vue").PropType<string>;
         default: string;
     };
@@ -144,9 +168,12 @@ export declare const Menu: import("vue").DefineComponent<{
     showIcon: boolean;
     closeWidth: string;
     offset: number;
+    alwaysPopover: boolean;
+    arrowType: string;
     theme: string;
     backgroundColor: string;
     activeColor: string;
     textColor: string;
+    activeTextCorlor: string;
 }>;
 export default Menu;

@@ -10,6 +10,7 @@ export declare const themeConfig: {
         backgroundColor: string;
         activeColor: string;
         textColor: string;
+        activeTextCorlor: string;
     };
 };
 declare type styleFormatProp = {

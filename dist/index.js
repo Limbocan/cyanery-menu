@@ -28,9 +28,10 @@ const themeConfig = {
     normal: {},
     primary: {
         closeWidth: '38px',
-        backgroundColor: '#5768f3',
-        activeColor: '#0f25d5',
-        textColor: '#fff'
+        backgroundColor: '#223e9c',
+        activeColor: '#2753c0',
+        textColor: '#fff',
+        activeTextCorlor: '#54fdff'
     }
 };
 const getStyleFormat = (style) => {
@@ -277,6 +278,14 @@ const MenuProps = {
         type: Number,
         default: 6
     },
+    alwaysPopover: {
+        type: Boolean,
+        default: false
+    },
+    arrowType: {
+        type: String,
+        default: 'arrow1'
+    },
     theme: {
         type: String,
         default: 'normal'
@@ -290,6 +299,10 @@ const MenuProps = {
         default: '#e67e22'
     },
     textColor: {
+        type: String,
+        default: '#fff'
+    },
+    activeTextCorlor: {
         type: String,
         default: '#fff'
     },
@@ -333,7 +346,9 @@ class GlobalState {
     pushActiveMenu(key, isOpen) {
         this.state.activeMenuKey = key;
         vue.nextTick(() => {
-            this.setActiveOpen(this.state.allMenus, this.state.activeMenus, isOpen);
+            if (!this.state.MenuPropsData.alwaysPopover) {
+                this.setActiveOpen(this.state.allMenus, this.state.activeMenus, isOpen);
+            }
         });
     }
     getActiveMenus(key, menus, deep = 0, result = []) {
@@ -402,8 +417,37 @@ class GlobalState {
 const globalState = new GlobalState();
 
 var script$2 = vue.defineComponent({
-    setup() {
-        return () => vue.h('svg', { viewBox: '0 0 1024 1024', width: '100%', height: '100%' }, vue.h('path', { d: 'M512 877.714286c-204.8 0-365.714286-160.914286-365.714286-365.714286s160.914286-365.714286 365.714286-365.714286 365.714286 160.914286 365.714286 365.714286-160.914286 365.714286-365.714286 365.714286M512 0C226.742857 0 0 226.742857 0 512s226.742857 512 512 512 512-226.742857 512-512-226.742857-512-512-512m0 365.714286c-80.457143 0-146.285714 65.828571-146.285714 146.285714s65.828571 146.285714 146.285714 146.285714 146.285714-65.828571 146.285714-146.285714-65.828571-146.285714-146.285714-146.285714' }));
+    props: {
+        type: {
+            type: String,
+            default: 'item'
+        },
+        class: {
+            type: String,
+            default: ''
+        },
+        width: {
+            type: String,
+            default: '100%'
+        },
+        height: {
+            type: String,
+            default: '100%'
+        }
+    },
+    setup(props) {
+        const IconType = vue.computed(() => {
+            return {
+                item: vue.h('svg', { viewBox: '0 0 1024 1024', class: props.class, width: props.width, height: props.height }, vue.h('path', { d: 'M512 877.714286c-204.8 0-365.714286-160.914286-365.714286-365.714286s160.914286-365.714286 365.714286-365.714286 365.714286 160.914286 365.714286 365.714286-160.914286 365.714286-365.714286 365.714286M512 0C226.742857 0 0 226.742857 0 512s226.742857 512 512 512 512-226.742857 512-512-226.742857-512-512-512m0 365.714286c-80.457143 0-146.285714 65.828571-146.285714 146.285714s65.828571 146.285714 146.285714 146.285714 146.285714-65.828571 146.285714-146.285714-65.828571-146.285714-146.285714-146.285714' })),
+                arrow1: vue.h('svg', { viewBox: '0 0 1024 1024', class: props.class, width: props.width, height: props.height }, vue.h('path', { d: 'M677.888 598.528l-254.464 239.616c-15.872 14.848-38.912 18.944-59.392 11.264-20.48-8.192-33.792-26.624-33.792-47.616V322.56c0-20.992 13.312-39.424 33.792-47.616 6.656-2.56 13.824-4.096 20.992-4.096 14.336 0 28.16 5.12 38.4 15.36l254.464 239.616c10.24 9.728 15.872 23.04 15.872 36.352 0.512 13.824-5.632 26.624-15.872 36.352z' })),
+                arrow2: vue.h('svg', { viewBox: '0 0 1024 1024', class: props.class, width: props.width, height: props.height }, vue.h('path', { d: 'M558.933333 490.666667L384 665.6l59.733333 59.733333 234.666667-234.666666L443.733333 256 384 315.733333l174.933333 174.933334z' })),
+                arrow3: vue.h('svg', { viewBox: '0 0 1024 1024', class: props.class, width: props.width, height: props.height }, [
+                    vue.h('path', { d: 'M837.9904 570.0608H124.5696a29.0304 29.0304 0 0 1-29.0304-29.0304V482.9696a29.0304 29.0304 0 0 1 29.0304-29.0304h713.4208z' }),
+                    vue.h('path', { d: 'M561.3056 808.96l-40.96-40.96a28.928 28.928 0 0 1 0-40.96l215.04-215.04-215.04-215.04a28.9792 28.9792 0 0 1 0-40.96l40.96-40.96a28.9792 28.9792 0 0 1 40.96 0l296.96 296.96-296.96 296.96a28.9792 28.9792 0 0 1-40.96 0z' })
+                ])
+            };
+        });
+        return () => IconType.value[props.type];
     },
 });
 
@@ -418,7 +462,7 @@ var script$1 = vue.defineComponent({
     },
     setup(__props) {
         const props = __props;
-        const initGap = 10;
+        const initGap = 12;
         const popover = vue.ref({
             show: false,
             stopClose: false,
@@ -512,10 +556,6 @@ var script$1 = vue.defineComponent({
 
 script$1.__file = "src/components/menu-popover/index.vue";
 
-const _hoisted_1 = vue.createElementVNode("path", { d: "M677.888 598.528l-254.464 239.616c-15.872 14.848-38.912 18.944-59.392 11.264-20.48-8.192-33.792-26.624-33.792-47.616V322.56c0-20.992 13.312-39.424 33.792-47.616 6.656-2.56 13.824-4.096 20.992-4.096 14.336 0 28.16 5.12 38.4 15.36l254.464 239.616c10.24 9.728 15.872 23.04 15.872 36.352 0.512 13.824-5.632 26.624-15.872 36.352z" }, null, -1);
-const _hoisted_2 = [
-    _hoisted_1
-];
 var script = vue.defineComponent({
     props: {
         data: {
@@ -550,7 +590,8 @@ var script = vue.defineComponent({
                     globalState.pushActiveMenu(props.data.key);
                 globalState.menuEmitsMethod('update:modelValue', props.data.key);
             }
-            if (hasChild.value && !props.isPopover && globalState.state.MenuPropsData.open !== false) {
+            if (hasChild.value && !props.isPopover && globalState.state.MenuPropsData.open !== false &&
+                globalState.state.MenuPropsData.alwaysPopover === false) {
                 const CURR_ITEM = { ...props.data };
                 if (!isOpen.value)
                     globalState.pushMenu(CURR_ITEM);
@@ -559,11 +600,18 @@ var script = vue.defineComponent({
             }
             globalState.menuEmitsMethod('menu-click', props.data);
         };
+        const popverDisabled = vue.computed(() => {
+            if (globalState.state.MenuPropsData.alwaysPopover)
+                return false;
+            return (!hasChild.value && props.isPopover) || globalState.state.MenuPropsData.open ||
+                globalState.state.MenuPropsData.open === undefined;
+        });
         const className = vue.computed(() => {
             let CLASS_STR = '';
             CLASS_STR += isOpen.value ? 'open-list ' : '';
             CLASS_STR += isActive.value ? 'open-active ' : '';
             CLASS_STR += props.data.disabled ? 'menu-disabled ' : '';
+            CLASS_STR += props.isPopover ? 'is-popover ' : '';
             return CLASS_STR;
         });
         const boxStyle = vue.computed(() => {
@@ -579,10 +627,7 @@ var script = vue.defineComponent({
             return (vue.openBlock(), vue.createElementBlock("li", {
                 class: vue.normalizeClass(vue.unref(getClassFomat)('menu-item'))
             }, [
-                vue.createCommentVNode(" :disabled=\"!hasChild || globalState.state.MenuPropsData.open || globalState.state.MenuPropsData.open === undefined\" "),
-                vue.createVNode(script$1, {
-                    disabled: (!hasChild.value && props.isPopover) || vue.unref(globalState).state.MenuPropsData.open || vue.unref(globalState).state.MenuPropsData.open === undefined
-                }, {
+                vue.createVNode(script$1, { disabled: vue.unref(popverDisabled) }, {
                     trigger: vue.withCtx(() => [
                         vue.createElementVNode("div", {
                             class: vue.normalizeClass(vue.unref(getClassFomat)(`menu-item-box ${vue.unref(className)}`)),
@@ -594,8 +639,11 @@ var script = vue.defineComponent({
                                 ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(props.itemSlot || vue.unref(globalState).state.MenuPropsData.itemRender), {
                                     key: 0,
                                     data: props.data,
+                                    active: vue.unref(isActive),
+                                    popover: props.isPopover,
+                                    disabled: props.data.disabled,
                                     open: vue.unref(isOpen)
-                                }, null, 8, ["data", "open"]))
+                                }, null, 8, ["data", "active", "popover", "disabled", "open"]))
                                 : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
                                     vue.createCommentVNode(" 默认菜单项DOM "),
                                     vue.createCommentVNode(" 自定义图标渲染或插槽 "),
@@ -606,9 +654,11 @@ var script = vue.defineComponent({
                                             ? (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(props.iconSlot || vue.unref(globalState).state.MenuPropsData.iconRender), {
                                                 key: 0,
                                                 data: props.data,
+                                                active: vue.unref(isActive),
                                                 open: vue.unref(isOpen),
+                                                disabled: props.data.disabled,
                                                 deep: props.deep
-                                            }, null, 8, ["data", "open", "deep"]))
+                                            }, null, 8, ["data", "active", "open", "disabled", "deep"]))
                                             : (vue.unref(globalState).state.MenuPropsData.showIcon && props.deep === 1)
                                                 ? (vue.openBlock(), vue.createBlock(script$2, { key: 1 }))
                                                 : vue.createCommentVNode("v-if", true)
@@ -619,14 +669,13 @@ var script = vue.defineComponent({
                                         class: vue.normalizeClass(vue.unref(getClassFomat)('menu-text'))
                                     }, vue.toDisplayString(props.data.name), 3),
                                     (hasChild.value)
-                                        ? (vue.openBlock(), vue.createElementBlock("svg", {
+                                        ? (vue.openBlock(), vue.createBlock(script$2, {
                                             key: 0,
                                             class: vue.normalizeClass(vue.unref(getClassFomat)(`col-icon ${vue.unref(isOpen) ? 'open-status' : ''} ${vue.unref(isActive) ? 'active-status' : ''}`)),
-                                            viewBox: "0 0 1024 1024",
-                                            version: "1.1",
+                                            type: vue.unref(globalState).state.MenuPropsData.arrowType,
                                             width: "16",
                                             height: "16"
-                                        }, _hoisted_2, 2))
+                                        }, null, 8, ["class", "type"]))
                                         : vue.createCommentVNode("v-if", true)
                                 ], 64))
                         ], 6)
@@ -784,7 +833,8 @@ const Menu = vue.defineComponent({
                 { prop: 'close-width', val: theme.closeWidth || props.closeWidth, type: 'num' },
                 { prop: 'theme-bg-color', val: theme.backgroundColor || props.backgroundColor, type: 'color' },
                 { prop: 'theme-active-color', val: theme.activeColor || props.activeColor, type: 'color' },
-                { prop: 'theme-text-color', val: theme.textColor || props.textColor, type: 'color' }
+                { prop: 'theme-text-color', val: theme.textColor || props.textColor, type: 'color' },
+                { prop: 'theme-active-text-color', val: theme.activeTextCorlor || props.activeTextCorlor, type: 'color' }
             ]);
         });
         expose({
@@ -825,7 +875,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".cy-menu.cy-menu-theme-normal .cy-menu-menu-list {\n  color: var(--cy-menu-theme-text-color);\n  background-color: var(--cy-menu-theme-bg-color);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box {\n  border-left: 3px solid transparent;\n  border-left-width: initial;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.1);\n  border-top: 1px solid rgba(255, 255, 255, 0.05);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover {\n  background-color: rgba(0, 0, 0, 0.1);\n  border-left-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-text, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-open-status {\n  color: #fff;\n  fill: #fff;\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active {\n  color: var(--cy-menu-theme-active-color);\n  border-left-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active::before {\n  content: \"\";\n  position: absolute;\n  left: 0;\n  top: 50%;\n  border: 4px solid transparent;\n  border-left-color: var(--cy-menu-theme-active-color);\n  transform: translateY(-50%);\n  transition: border 0.3s ease-in-out;\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-text, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-active-status {\n  color: var(--cy-menu-theme-active-color);\n  fill: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled {\n  color: #ccc;\n  background-color: #a7b4bf;\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-col-icon {\n  fill: #ccc;\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) {\n  background-color: #60686a;\n}\n\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list {\n  color: var(--cy-menu-theme-text-color);\n  background-color: var(--cy-menu-theme-bg-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover {\n  color: var(--cy-menu-theme-bg-color);\n  background-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover > .cy-menu-col-icon {\n  fill: var(--cy-menu-theme-bg-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list {\n  background-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-text, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-col-icon {\n  color: var(--cy-menu-theme-bg-color);\n  fill: var(--cy-menu-theme-bg-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active {\n  color: var(--cy-menu-theme-text-color);\n  background-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-text, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-active-status {\n  color: var(--cy-menu-theme-bg-color);\n  fill: var(--cy-menu-theme-bg-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled {\n  color: #e9e9ee;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-col-icon {\n  fill: #e9e9ee;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-toggle-open {\n  color: #a2b5f7;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) {\n  background-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) .cy-menu-menu-item-box {\n  padding-right: 26px;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-popover-content .cy-menu-menu-item-box {\n  padding: 10px;\n}\n\n.cy-menu {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: flex-start;\n  height: 100%;\n  width: var(--cy-menu-width);\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2901960784);\n  user-select: none;\n  overflow: hidden;\n  transition: width 0.2s ease-in-out;\n}\n.cy-menu.cy-menu-close-status {\n  width: var(--cy-menu-close-width);\n}\n.cy-menu.cy-menu-close-status .cy-menu-menu-list:not(.cy-menu-list-child-0) .cy-menu-menu-icon {\n  display: none;\n}\n.cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-menu-icon {\n  display: unset;\n}\n.cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-menu-text, .cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-col-icon {\n  display: none;\n}\n.cy-menu.cy-menu-open-status {\n  width: var(--cy-menu-width);\n}\n.cy-menu .cy-menu-toggle-box {\n  position: absolute;\n  right: 0;\n  width: 40px;\n  height: 40px;\n  background-color: aqua;\n}\n.cy-menu .cy-menu-menu-list {\n  position: relative;\n  margin: 0;\n  padding: 0;\n  width: 100%;\n  flex: 1;\n  overflow: auto;\n  transition: height var(--cy-menu-time) ease-in-out, padding-top var(--cy-menu-time) ease-in-out, padding-bottom var(--cy-menu-time) ease-in-out, max-height var(--cy-menu-time) ease-in-out;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item {\n  --cy-menu-time: 0.3s;\n  list-style: none;\n  width: 100%;\n  overflow: hidden;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box {\n  position: relative;\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  padding: 12px 22px 12px 12px;\n  white-space: nowrap;\n  cursor: pointer;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  transition: background 0.2s ease-in-out, border 0.2s ease-in-out, color 0.2s ease-in-out;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-menu-icon {\n  fill: var(--cy-menu-theme-text-color);\n  min-width: 22px;\n  width: 22px;\n  height: 22px;\n  padding: 0 4px;\n  margin-right: 6px;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-col-icon {\n  fill: var(--cy-menu-theme-text-color);\n  position: absolute;\n  right: 2px;\n  transition: transform 0.2s linear;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-col-icon.cy-menu-open-status {\n  transform: rotate(90deg);\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled {\n  cursor: not-allowed;\n}\n.cy-menu .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) {\n  overflow: hidden;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar {\n  width: 4px;\n  background-color: var(--cy-menu-theme-bg-color);\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb {\n  border-radius: 2px;\n  background-color: #c1c1c1;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb:hover {\n  background-color: #a8a8a8;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb:active {\n  background-color: #787878;\n}\n.cy-menu .cy-menu-menu-list {\n  scrollbar-width: thin;\n  scrollbar-color: #c1c1c1 #eee;\n}\n\n.cy-menu-popover {\n  --cy-menu-popover-color: rgba(98, 109, 121, 0.8862745098);\n  position: fixed;\n  left: var(--cy-menu-popover-x);\n  top: var(--cy-menu-popover-y);\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-start;\n  align-items: flex-start;\n}\n.cy-menu-popover .cy-menu-popover-tip {\n  position: absolute;\n  left: 0;\n  top: var(--cy-menu-gap);\n  border: 10px solid transparent;\n  border-right-color: var(--cy-menu-popover-color);\n  margin-left: -4px;\n}\n.cy-menu-popover .cy-menu-popover-content {\n  position: absolute;\n  left: 15px;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.329);\n  border-radius: 2px;\n  background-color: var(--cy-menu-popover-color);\n}\n.cy-menu-popover .cy-menu-popover-content .cy-menu-popover-label {\n  display: block;\n  white-space: nowrap;\n  padding: 10px;\n}\n\n.popover-enter-active,\n.popover-leave-active {\n  transition: all 0.2s;\n}\n\n.popover-enter-from,\n.popover-leave-to {\n  opacity: 0;\n}";
+var css_248z = ".cy-menu.cy-menu-theme-normal .cy-menu-menu-list {\n  color: var(--cy-menu-theme-text-color);\n  background-color: var(--cy-menu-theme-bg-color);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box {\n  border-left: 3px solid transparent;\n  border-left-width: initial;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.1);\n  border-top: 1px solid rgba(255, 255, 255, 0.05);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover {\n  background-color: rgba(0, 0, 0, 0.1);\n  border-left-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-menu-text, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-list > .cy-menu-open-status {\n  color: #fff;\n  fill: #fff;\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active {\n  color: var(--cy-menu-theme-active-color);\n  border-left-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active::before {\n  content: \"\";\n  position: absolute;\n  left: 0;\n  top: 50%;\n  border: 4px solid transparent;\n  border-left-color: var(--cy-menu-theme-active-color);\n  transform: translateY(-50%);\n  transition: border 0.3s ease-in-out;\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-text, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-active-status {\n  color: var(--cy-menu-theme-active-color);\n  fill: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled {\n  color: #ccc;\n  background-color: #a7b4bf;\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-normal .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-col-icon {\n  fill: #ccc;\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) {\n  background-color: #60686a;\n}\n.cy-menu.cy-menu-theme-normal .cy-menu-popover-content .cy-menu-menu-item-box.cy-menu-is-popover {\n  background-color: var(--cy-menu-theme-bg-color);\n}\n\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list {\n  color: var(--cy-menu-theme-text-color);\n  background-color: var(--cy-menu-theme-bg-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box {\n  padding-top: 12px;\n  padding-bottom: 12px;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover {\n  color: var(--cy-menu-theme-active-text-color);\n  background-color: var(--cy-menu-theme-active-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box:hover > .cy-menu-col-icon {\n  fill: var(--cy-menu-theme-active-text-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-menu-text, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-open-active > .cy-menu-active-status {\n  color: var(--cy-menu-theme-active-text-color);\n  fill: var(--cy-menu-theme-active-text-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled {\n  color: #e9e9ee;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-menu-icon, .cy-menu.cy-menu-theme-primary .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled > .cy-menu-col-icon {\n  fill: #e9e9ee;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) .cy-menu-popover-template > .cy-menu-menu-item-box:not(.cy-menu-is-popover) {\n  padding-top: 8px;\n  padding-bottom: 8px;\n  padding-right: 26px;\n  color: #e4e6ec;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) .cy-menu-popover-template > .cy-menu-menu-item-box:not(.cy-menu-is-popover)::before {\n  content: \"\";\n  position: absolute;\n  left: 18px;\n  top: 0;\n  bottom: 0;\n  width: 2px;\n  background-color: #0355a3;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) .cy-menu-popover-template > .cy-menu-menu-item-box:not(.cy-menu-is-popover).cy-menu-open-active::before {\n  background-color: #a2b5f7;\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) .cy-menu-popover-template > .cy-menu-menu-item-box:not(.cy-menu-is-popover):hover {\n  color: var(--cy-menu-theme-active-text-color);\n  background-color: var(--cy-menu-theme-bg-color);\n}\n.cy-menu.cy-menu-theme-primary .cy-menu-popover-content .cy-menu-menu-item-box.cy-menu-is-popover {\n  padding-top: 10px;\n  padding-bottom: 10px;\n}\n\n.cy-menu {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-between;\n  align-items: flex-start;\n  height: 100%;\n  width: var(--cy-menu-width);\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2901960784);\n  user-select: none;\n  overflow: hidden;\n  transition: width 0.2s ease-in-out;\n}\n.cy-menu.cy-menu-close-status {\n  width: var(--cy-menu-close-width);\n}\n.cy-menu.cy-menu-close-status .cy-menu-menu-list:not(.cy-menu-list-child-0) .cy-menu-menu-icon {\n  display: none;\n}\n.cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-menu-icon {\n  display: unset;\n}\n.cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-menu-text, .cy-menu.cy-menu-close-status > .cy-menu-list-child-0 > .cy-menu-menu-item > .cy-menu-popover-template > .cy-menu-menu-item-box .cy-menu-col-icon {\n  display: none;\n}\n.cy-menu.cy-menu-open-status {\n  width: var(--cy-menu-width);\n}\n.cy-menu .cy-menu-toggle-box {\n  position: absolute;\n  right: 0;\n  width: 40px;\n  height: 40px;\n  background-color: aqua;\n}\n.cy-menu .cy-menu-menu-list {\n  position: relative;\n  margin: 0;\n  padding: 0;\n  width: 100%;\n  flex: 1;\n  overflow: auto;\n  transition: height var(--cy-menu-time) ease-in-out, padding-top var(--cy-menu-time) ease-in-out, padding-bottom var(--cy-menu-time) ease-in-out, max-height var(--cy-menu-time) ease-in-out;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item {\n  --cy-menu-time: 0.3s;\n  list-style: none;\n  width: 100%;\n  overflow: hidden;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box {\n  position: relative;\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  padding: 12px 24px 12px 12px;\n  font-size: 14px;\n  white-space: nowrap;\n  cursor: pointer;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  transition: background 0.2s ease-in-out, border 0.2s ease-in-out, color 0.2s ease-in-out;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-menu-icon {\n  fill: var(--cy-menu-theme-text-color);\n  min-width: 22px;\n  width: 22px;\n  height: 22px;\n  padding: 0 4px;\n  margin-right: 6px;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-col-icon {\n  fill: var(--cy-menu-theme-text-color);\n  position: absolute;\n  right: 4px;\n  transition: transform 0.2s linear;\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box .cy-menu-col-icon.cy-menu-open-status {\n  transform: rotate(90deg);\n}\n.cy-menu .cy-menu-menu-list .cy-menu-menu-item .cy-menu-menu-item-box.cy-menu-menu-disabled {\n  cursor: not-allowed;\n}\n.cy-menu .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) {\n  overflow: hidden;\n}\n.cy-menu .cy-menu-menu-list[class*=cy-menu-list-child]:not(.cy-menu-list-child-0) .cy-menu-menu-item-box {\n  font-size: 12px;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar {\n  width: 4px;\n  background-color: var(--cy-menu-theme-bg-color);\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb {\n  border-radius: 2px;\n  background-color: #c1c1c1;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb:hover {\n  background-color: #a8a8a8;\n}\n.cy-menu .cy-menu-menu-list::-webkit-scrollbar-thumb:active {\n  background-color: #787878;\n}\n.cy-menu .cy-menu-menu-list {\n  scrollbar-width: thin;\n  scrollbar-color: #c1c1c1 #eee;\n}\n\n.cy-menu-popover {\n  position: fixed;\n  left: var(--cy-menu-popover-x);\n  top: var(--cy-menu-popover-y);\n  display: flex;\n  flex-direction: row;\n  justify-content: flex-start;\n  align-items: flex-start;\n}\n.cy-menu-popover .cy-menu-popover-tip {\n  position: absolute;\n  left: 0;\n  top: var(--cy-menu-gap);\n  border: 10px solid transparent;\n  border-right-color: var(--cy-menu-theme-bg-color);\n  margin-left: -4px;\n}\n.cy-menu-popover .cy-menu-popover-content {\n  position: absolute;\n  left: 15px;\n  box-shadow: 0 0 12px rgba(0, 0, 0, 0.329);\n  border-radius: 2px;\n  background-color: var(--cy-menu-theme-bg-color);\n}\n.cy-menu-popover .cy-menu-popover-content .cy-menu-popover-label {\n  display: block;\n  white-space: nowrap;\n  padding: 12px;\n  font-size: 12px;\n}\n\n.popover-enter-active,\n.popover-leave-active {\n  transition: all 0.2s;\n}\n\n.popover-enter-from,\n.popover-leave-to {\n  opacity: 0;\n}";
 styleInject(css_248z);
 
 const CyaneryMenu = withInstall(Menu);
