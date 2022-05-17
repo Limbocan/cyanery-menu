@@ -171,3 +171,107 @@
     }
   }
 }
+// dark主题样式
+.#{$preName}.#{$preName}-theme-dark {
+  &>.#{$preName}-menu-list>.#{$preName}-menu-item + .#{$preName}-menu-item {
+    margin-top: 8px;
+  }
+
+  // 菜单列表
+  .#{$preName}-menu-list {
+    color: var(#{$prefix}-theme-text-color);
+    background-color: var(#{$prefix}-theme-bg-color);
+
+    // 菜单项
+    .#{$preName}-menu-item {
+
+      // 菜单项box
+      .#{$preName}-menu-item-box {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-right: 28px;
+        border-radius: 10px;
+        margin: 0 8px;
+
+        &>.#{$preName}-col-icon {
+          right: 12px;
+        }
+        &:hover {
+          color: var(#{$prefix}-theme-active-text-color);
+          background-color: var(#{$prefix}-theme-active-color);
+
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-col-icon {
+            fill: var(#{$prefix}-theme-active-text-color);
+          }
+        }
+        // 展开样式
+        &.#{$preName}-open-list {
+          border-radius: 10px 10px 0 0;
+          background-color: var(#{$prefix}-theme-active-color);
+        }
+
+        // 活跃样式
+        &.#{$preName}-open-active {
+
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-menu-text,
+          &>.#{$preName}-active-status {
+            color: var(#{$prefix}-theme-active-text-color);
+            fill: var(#{$prefix}-theme-active-text-color);
+          }
+        }
+
+        // 禁用样式
+        &.#{$preName}-menu-disabled {
+          color: #e9e9ee;
+
+          &>.#{$preName}-menu-icon,
+          &>.#{$preName}-col-icon {
+            fill: #e9e9ee;
+          }
+        }
+      }
+    }
+  }
+
+  // 子列表
+  .#{$preName}-menu-list[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
+    // padding: 0 8px;
+    & .#{$preName}-popover-template > .#{$preName}-menu-item-box:not(.#{$preName}-is-popover) {
+      padding-top: 8px;
+      padding-bottom: 8px;
+      padding-right: 26px;
+      color: var(#{$prefix}-theme-text-color);
+      border-radius: 0;
+      background-color: var(#{$prefix}-theme-active-color);
+      &::before {
+        content: '';
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: var(#{$prefix}-theme-text-color);
+        transform: translateY(-50%);
+      }
+      &.#{$preName}-open-active::before {
+        background-color: var(#{$prefix}-theme-active-text-color);
+      }
+      &:hover {
+        color: var(#{$prefix}-theme-active-text-color);
+        background-color: var(#{$prefix}-theme-active-color);
+      }
+    }
+  }
+  // 浮窗
+  .#{$preName}-popover-content {
+    .#{$preName}-menu-item-box.#{$preName}-is-popover {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+}

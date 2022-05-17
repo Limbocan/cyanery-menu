@@ -14,6 +14,13 @@ export const themeConfig = {
     activeColor: '#2753c0',
     textColor: '#fff',
     activeTextCorlor: '#54fdff'
+  },
+  dark: {
+    closeWidth: '44px',
+    backgroundColor: '#1e1e2f',
+    activeColor: '#3a3f51',
+    textColor: '#8c909a',
+    activeTextCorlor: '#007bff'
   }
 }
 
