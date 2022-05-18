@@ -1,5 +1,5 @@
 
-import { defineComponent, h, ref, computed, watch, onMounted } from 'vue'
+import { defineComponent, h, nextTick, computed, watch, onMounted } from 'vue'
 import { MenuListComponent } from '../menu-list/index'
 import { MenuToggleComponent } from '../menu-toggle/index'
 import { componentConfig, themeConfig, getStyleFormat, getClassFomat } from 'src/utils/use-style'
@@ -18,20 +18,20 @@ export const Menu = defineComponent({
     globalState.setMenuProps(props)
 
     // 菜单是否展开显示
-    const isOpen = ref(props.open ?? true)
+    globalState.state.isOpen = props.open ?? true
 
     // 监听收起菜单
     watch(
       () => props.open,
       (val) => {
-        isOpen.value = val
-        if (val === false) globalState.closeAllMenu()
+        globalState.state.isOpen = val
+        nextTick(() => { if (val === false) globalState.closeAllMenu() })
       }
     )
     // 监听当前活跃菜单项
     watch(
       () => props.modelValue,
-      (key) => globalState.pushActiveMenu(key, isOpen.value),
+      (key) => globalState.pushActiveMenu(key, globalState.state.isOpen),
       { immediate: true }
     )
     onMounted(() => {
@@ -64,10 +64,11 @@ export const Menu = defineComponent({
       const toggleDom = h(
         MenuToggleComponent,
         {
-          modelValue: props.open ?? isOpen.value,
+          modelValue: props.open ?? globalState.state.isOpen,
           'onUpdate:modelValue': (val) => {
-            isOpen.value = val
+            globalState.state.isOpen = val
             globalState.menuEmitsMethod('update:open', val)
+            if (val === false) globalState.closeAllMenu()
           }
         }
       )
@@ -109,7 +110,7 @@ export const Menu = defineComponent({
       'div',
       {
         class: `${componentConfig.mainClass} ` + getClassFomat(props.className +
-          ` theme-${props.theme} ${(props.open ?? isOpen.value) ? 'open-status' : 'close-status'}`),
+          ` theme-${props.theme} ${(props.open ?? globalState.state.isOpen) ? 'open-status' : 'close-status'}`),
         style: styleVar.value,
       },
       childDomList.value

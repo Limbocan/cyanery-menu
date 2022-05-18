@@ -3,6 +3,7 @@
 @import './theme.scss';
 
 .#{$preName} {
+  #{$prefix}-animate-time: .3s;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -12,7 +13,7 @@
   width: var(#{$prefix}-width);
   box-shadow: 0 0 12px #0000004a;
   user-select: none;
-  overflow: hidden;
+  // overflow: hidden;
   transition: width .2s ease-in-out;
 
   // 菜单收起状态样式
@@ -44,10 +45,10 @@
   // 菜单切换按钮
   .#{$preName}-toggle-box {
     position: absolute;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    background-color: aqua;
+    right: -30px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
   }
 
   // 通用样式
@@ -58,14 +59,13 @@
     width: 100%;
     flex: 1;
     overflow: auto;
-    transition: height var(#{$prefix}-time) ease-in-out,
-    padding-top var(#{$prefix}-time) ease-in-out,
-    padding-bottom var(#{$prefix}-time) ease-in-out,
-    max-height var(#{$prefix}-time) ease-in-out;
+    transition: height var(#{$prefix}-animate-time) ease-in-out,
+    padding-top var(#{$prefix}-animate-time) ease-in-out,
+    padding-bottom var(#{$prefix}-animate-time) ease-in-out,
+    max-height var(#{$prefix}-animate-time) ease-in-out;
 
     // 菜单项样式
     & .#{$preName}-menu-item {
-      #{$prefix}-time: .3s;
       list-style: none;
       width: 100%;
       overflow: hidden;

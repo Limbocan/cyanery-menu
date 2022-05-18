@@ -122,6 +122,7 @@ class GlobalState {
   state
   constructor() {
     this.state = reactive({
+      isOpen: true,
       allMenus: [], // 所有菜单数据
       openedMenus: [], // 打开的菜单项
       activeMenuKey: '', // 当前活跃菜单项

@@ -1,5 +1,6 @@
 
 import { defineComponent, h, PropType, computed } from 'vue'
+import MenuIcon from '../menu-item/icon.vue'
 import { getClassFomat } from 'src/utils/use-style'
 // 组件参数
 const ToggleProps = {
@@ -31,9 +32,10 @@ export const MenuToggleComponent = defineComponent({
     }
 
     return () => h(
-      'div',
+      MenuIcon,
       {
         class: getClassFomat('toggle-box ' + status.value),
+        type: 'arrow3',
         onClick: () => toggleClick(),
       },
       status.value

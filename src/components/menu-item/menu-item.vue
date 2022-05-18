@@ -137,7 +137,7 @@ const nextActive = (key = props.data.key) => {
 const popverDisabled = computed(() => {
   if (globalState.state.MenuPropsData.alwaysPopover) return false
   return (!hasChild.value && props.isPopover) || globalState.state.MenuPropsData.open ||
-    globalState.state.MenuPropsData.open === undefined
+    (globalState.state.MenuPropsData.open === undefined && globalState.state.isOpen)
 })
 // 菜单样式类
 const className = computed(() => {
