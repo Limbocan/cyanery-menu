@@ -171,10 +171,16 @@
     }
   }
 }
+
 // dark主题样式
 .#{$preName}.#{$preName}-theme-dark {
-  &>.#{$preName}-menu-list>.#{$preName}-menu-item + .#{$preName}-menu-item {
-    margin-top: 8px;
+
+  &>.#{$preName}-menu-list>.#{$preName}-menu-item {
+    margin-top: 4px;
+  }
+
+  &>.#{$preName}-menu-list>.#{$preName}-menu-item:nth-child(1) {
+    margin-top: 10px;
   }
 
   // 菜单列表
@@ -190,8 +196,6 @@
         padding-top: 12px;
         padding-bottom: 12px;
         padding-right: 28px;
-        border-radius: 10px;
-        margin: 0 8px;
 
         &>.#{$preName}-col-icon {
           right: 12px;
@@ -213,6 +217,7 @@
 
         // 活跃样式
         &.#{$preName}-open-active {
+          background-color: var(#{$prefix}-theme-active-color);
 
           &>.#{$preName}-menu-icon,
           &>.#{$preName}-menu-text,
@@ -233,6 +238,11 @@
         }
       }
     }
+  }
+
+  &:not(.#{$preName}-close-status) .#{$preName}-menu-list .#{$preName}-menu-item-box {
+    margin: 0 12px;
+    border-radius: 10px;
   }
 
   // 子列表
@@ -267,6 +277,8 @@
   }
   // 浮窗
   .#{$preName}-popover-content {
+    // left: 0;
+    box-shadow: 4px 4px 12px #00000033;
     .#{$preName}-menu-item-box.#{$preName}-is-popover {
       padding-top: 10px;
       padding-bottom: 10px;
@@ -274,4 +286,7 @@
       border-radius: 0;
     }
   }
+  // .#{$preName}-popover-tip {
+  //   display: none;
+  // }
 }

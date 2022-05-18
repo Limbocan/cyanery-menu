@@ -33,6 +33,10 @@ export declare const MenuProps: {
         type: PropType<string>;
         default: string;
     };
+    beforeRouter: {
+        type: PropType<Function>;
+        default: any;
+    };
     showIcon: {
         type: PropType<boolean>;
         default: boolean;

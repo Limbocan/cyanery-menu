@@ -7,7 +7,13 @@ export enum componentConfig {
 }
 
 export const themeConfig = {
-  normal: {},
+  normal: {
+    closeWidth: '44px',
+    backgroundColor: '#333',
+    activeColor: '#e67e22',
+    textColor: '#fff',
+    activeTextCorlor: '#fff'
+  },
   primary: {
     closeWidth: '38px',
     backgroundColor: '#223e9c',
@@ -16,7 +22,7 @@ export const themeConfig = {
     activeTextCorlor: '#54fdff'
   },
   dark: {
-    closeWidth: '44px',
+    closeWidth: '38px',
     backgroundColor: '#1e1e2f',
     activeColor: '#3a3f51',
     textColor: '#8c909a',
@@ -39,7 +45,7 @@ export const getStyleFormat = (style: styleFormatProp[]) => {
     let PROPVALUE = null
     switch (s.type) {
       case 'num':
-        if (/^\d+\.?\d+$/g.test(s.val)) PROPVALUE = s.val + 'px'
+        if (/^[1-9][0-9]*([\.][0-9]+)?$/g.test(s.val)) PROPVALUE = s.val + 'px'
         else PROPVALUE = s.val
         break
       case 'color':

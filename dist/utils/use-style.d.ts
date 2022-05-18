@@ -4,7 +4,13 @@ export declare enum componentConfig {
     classPrefix = "cy-menu-"
 }
 export declare const themeConfig: {
-    normal: {};
+    normal: {
+        closeWidth: string;
+        backgroundColor: string;
+        activeColor: string;
+        textColor: string;
+        activeTextCorlor: string;
+    };
     primary: {
         closeWidth: string;
         backgroundColor: string;

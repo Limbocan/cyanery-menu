@@ -116,8 +116,9 @@ const hasChild = ref(props.data.children && props.data.children.length > 0)
 const menuClick = () => {
   if (props.data.disabled) return false
   if (!hasChild.value) {
-    if (globalState.state.MenuPropsData.modelValue === undefined) globalState.pushActiveMenu(props.data.key)
-    globalState.menuEmitsMethod('update:modelValue', props.data.key)
+    const next = globalState.state.MenuPropsData.beforeRouter
+    if (next) next(globalState.state.activeMenuKey, props.data.key, nextActive) 
+    else nextActive(props.data.key)
   }
   if (hasChild.value && !props.isPopover && globalState.state.MenuPropsData.open !== false &&
     globalState.state.MenuPropsData.alwaysPopover === false) {
@@ -126,6 +127,11 @@ const menuClick = () => {
     else globalState.remove(CURR_ITEM)
   }
   globalState.menuEmitsMethod('menu-click', props.data)
+}
+// 菜单活跃项跳转
+const nextActive = (key = props.data.key) => {
+  if (globalState.state.MenuPropsData.modelValue === undefined) globalState.pushActiveMenu(key)
+  globalState.menuEmitsMethod('update:modelValue', key)
 }
 // 菜单浮窗禁止条件
 const popverDisabled = computed(() => {

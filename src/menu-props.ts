@@ -45,6 +45,11 @@ export const MenuProps = {
     type: String as PropType<string>,
     default: 'click'
   },
+  // 菜单跳转拦截
+  beforeRouter: {
+    type: Function || undefined as PropType<Function | undefined>,
+    default: undefined
+  },
   // 展示菜单图标
   showIcon: {
     type: Boolean as PropType<boolean>,
@@ -53,7 +58,7 @@ export const MenuProps = {
   // 菜单收起宽度
   closeWidth: {
     type: String as PropType<string>,
-    default: '44px'
+    default: ''
   },
   // 次级菜单缩进（单位像素）
   offset: {
@@ -78,22 +83,22 @@ export const MenuProps = {
   // 菜单背景色
   backgroundColor: {
     type: String as PropType<string>,
-    default: '#333'
+    default: ''
   },
   // 菜单主题色
   activeColor: {
     type: String as PropType<string>,
-    default: '#e67e22'
+    default: ''
   },
-  // 菜单主题色
+  // 菜单文字颜色
   textColor: {
     type: String as PropType<string>,
-    default: '#fff'
+    default: ''
   },
   // 菜单主题文字颜色
   activeTextCorlor: {
     type: String as PropType<string>,
-    default: '#fff'
+    default: ''
   },
   // 菜单头部渲染方法
   headerRender: RenderProp,

@@ -93,11 +93,11 @@ export const Menu = defineComponent({
       const theme = themeConfig[props.theme]
       return getStyleFormat([
         { prop: 'width', val: props.width, type: 'num' },
-        { prop: 'close-width', val: theme.closeWidth || props.closeWidth, type: 'num' },
-        { prop: 'theme-bg-color', val: theme.backgroundColor || props.backgroundColor, type: 'color' },
-        { prop: 'theme-active-color', val: theme.activeColor || props.activeColor, type: 'color' },
-        { prop: 'theme-text-color', val: theme.textColor || props.textColor, type: 'color' },
-        { prop: 'theme-active-text-color', val: theme.activeTextCorlor || props.activeTextCorlor, type: 'color' }
+        { prop: 'close-width', val: props.closeWidth || theme.closeWidth, type: 'num' },
+        { prop: 'theme-bg-color', val:  props.backgroundColor || theme.backgroundColor, type: 'color' },
+        { prop: 'theme-active-color', val: props.activeColor || theme.activeColor, type: 'color' },
+        { prop: 'theme-text-color', val: props.textColor || theme.textColor, type: 'color' },
+        { prop: 'theme-active-text-color', val: props.activeTextCorlor || theme.activeTextCorlor, type: 'color' }
       ])
     })
 

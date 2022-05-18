@@ -31,6 +31,10 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<string>;
         default: string;
     };
+    beforeRouter: {
+        type: import("vue").PropType<Function>;
+        default: any;
+    };
     showIcon: {
         type: import("vue").PropType<boolean>;
         default: boolean;
@@ -110,6 +114,10 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<string>;
         default: string;
     };
+    beforeRouter: {
+        type: import("vue").PropType<Function>;
+        default: any;
+    };
     showIcon: {
         type: import("vue").PropType<boolean>;
         default: boolean;
@@ -165,6 +173,7 @@ export declare const Menu: import("vue").DefineComponent<{
     toggleButton: boolean;
     unique: boolean;
     trigger: string;
+    beforeRouter: Function;
     showIcon: boolean;
     closeWidth: string;
     offset: number;
