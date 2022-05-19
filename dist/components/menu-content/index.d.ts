@@ -1,10 +1,11 @@
+import type { MenuItemProps } from '../../types';
 export declare const Menu: import("vue").DefineComponent<{
     modelValue: {
         type: StringConstructor | import("vue").PropType<string>;
         default: any;
     };
     data: {
-        type: import("vue").PropType<import("../../types").MenuItemProps[]>;
+        type: import("vue").PropType<MenuItemProps[]>;
         default: () => any[];
     };
     className: {
@@ -87,7 +88,7 @@ export declare const Menu: import("vue").DefineComponent<{
         default: any;
     };
     data: {
-        type: import("vue").PropType<import("../../types").MenuItemProps[]>;
+        type: import("vue").PropType<MenuItemProps[]>;
         default: () => any[];
     };
     className: {
@@ -165,7 +166,7 @@ export declare const Menu: import("vue").DefineComponent<{
 }>> & {
     [x: string & `on${string}`]: (...args: any[]) => any;
 }, {
-    data: import("../../types").MenuItemProps[];
+    data: MenuItemProps[];
     modelValue: string;
     className: string;
     width: string | number;

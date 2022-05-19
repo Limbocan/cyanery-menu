@@ -870,7 +870,9 @@ const Menu = vue.defineComponent({
             ]);
         });
         expose({
-            closeAll: () => globalState.closeAllMenu()
+            closeAll: () => globalState.closeAllMenu(),
+            openMenu: (menu) => globalState.pushMenu(menu),
+            closeMenu: (menu) => globalState.remove(menu)
         });
         return () => vue.h('div', {
             class: `${componentConfig.mainClass} ` + getClassFomat(props.className +

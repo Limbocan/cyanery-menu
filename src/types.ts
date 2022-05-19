@@ -6,6 +6,7 @@ export type MenuItemProps = {
   key: string | null,
   path: string | null,
   disabled?: boolean,
+  deep?: number,
   children?: MenuItemProps[]
 }
 

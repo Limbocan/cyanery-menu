@@ -4,6 +4,7 @@ export declare type MenuItemProps = {
     key: string | null;
     path: string | null;
     disabled?: boolean;
+    deep?: number;
     children?: MenuItemProps[];
 };
 export declare const RenderProp: PropType<string | (() => VNodeChild)>;

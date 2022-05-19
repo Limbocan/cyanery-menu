@@ -4,6 +4,7 @@ import { MenuListComponent } from '../menu-list/index'
 import { MenuToggleComponent } from '../menu-toggle/index'
 import { componentConfig, themeConfig, getStyleFormat, getClassFomat } from 'src/utils/use-style'
 import { MenuProps, MenuEmits, globalState } from '../../menu-props'
+import type { MenuItemProps } from '../../types'
 
 // 组件
 export const Menu = defineComponent({
@@ -102,8 +103,11 @@ export const Menu = defineComponent({
       ])
     })
 
+    // 组件API方法
     expose({
-      closeAll: () => globalState.closeAllMenu()
+      closeAll: ():void => globalState.closeAllMenu(),
+      openMenu: (menu: MenuItemProps):void => globalState.pushMenu(menu),
+      closeMenu: (menu: MenuItemProps):void => globalState.remove(menu)
     })
 
     return () => h(

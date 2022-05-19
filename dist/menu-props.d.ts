@@ -2,7 +2,7 @@ import { PropType } from 'vue';
 import type { MenuItemProps } from './types';
 export declare const MenuProps: {
     modelValue: {
-        type: PropType<string> | StringConstructor;
+        type: StringConstructor | PropType<string>;
         default: any;
     };
     data: {
