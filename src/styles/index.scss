@@ -48,7 +48,15 @@
     right: -30px;
     width: 30px;
     height: 30px;
-    background-color: transparent;
+    background-color: var(#{$prefix}-theme-bg-color);
+    fill: var(#{$prefix}-theme-text-color);
+    cursor: pointer;
+    &:hover {
+      fill: var(#{$prefix}-theme-active-text-color);
+    }
+    &.#{$preName}-is-open {
+      transform: rotate(180deg);
+    }
   }
 
   // 通用样式
