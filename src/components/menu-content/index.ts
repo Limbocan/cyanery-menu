@@ -1,5 +1,5 @@
 
-import { defineComponent, h, reactive, nextTick, computed, watch, onMounted, provide } from 'vue'
+import { defineComponent, h, ref, reactive, nextTick, computed, watch, onMounted, provide } from 'vue'
 import { MenuListComponent } from '../menu-list/index'
 import { MenuToggleComponent } from '../menu-toggle/index'
 import { componentConfig, themeConfig, getStyleFormat, getClassFomat } from 'src/utils/use-style'
@@ -14,6 +14,7 @@ export const Menu = defineComponent({
   setup(props, { emit, slots, expose }) {
 
     const globalState = reactive(new GlobalState())
+    const ContentRef = ref(null)
 
     provide('globalState', globalState)
 
@@ -44,7 +45,7 @@ export const Menu = defineComponent({
       watch(
         () => props.trigger,
         (val) => {
-          const MENU_DOM = document.querySelector(`.${componentConfig.mainClass}`)
+          const MENU_DOM = ContentRef.value
           if (val === 'hover') {
             globalState.menuEmitsMethod('update:open', false)
             MENU_DOM.addEventListener('mouseenter', changeOpen)
@@ -114,14 +115,34 @@ export const Menu = defineComponent({
       closeMenu: (menu: MenuItemProps):void => globalState.remove(menu)
     })
 
-    return () => h(
+    // return () => h(
+    //   'div',
+    //   {
+    //     class: `${componentConfig.mainClass} ` + getClassFomat(props.className +
+    //       ` theme-${props.theme} ${(props.open ?? globalState.state.isOpen) ? 'open-status' : 'close-status'}`),
+    //     style: styleVar.value,
+    //     ref: 'ContentRef'
+    //   },
+    //   childDomList.value
+    // )
+    return {
+      ContentRef,
+      props,
+      globalState,
+      styleVar,
+      childDomList
+    }
+  },
+  render() {
+    return h(
       'div',
       {
-        class: `${componentConfig.mainClass} ` + getClassFomat(props.className +
-          ` theme-${props.theme} ${(props.open ?? globalState.state.isOpen) ? 'open-status' : 'close-status'}`),
-        style: styleVar.value,
+        class: `${componentConfig.mainClass} ` + getClassFomat(this.props.className +
+          ` theme-${this.props.theme} ${(this.props.open ?? this.globalState.state.isOpen) ? 'open-status' : 'close-status'}`),
+        style: this.styleVar,
+        ref: 'ContentRef'
       },
-      childDomList.value
+      this.childDomList
     )
   }
 })

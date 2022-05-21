@@ -283,6 +283,11 @@
   .#{$preName}-popover-content {
     // left: 0;
     box-shadow: 4px 4px 12px #00000033;
+
+    .#{$preName}-list-child-1 {
+      box-shadow: none;
+    }
+
     .#{$preName}-menu-item-box.#{$preName}-is-popover {
       padding-top: 10px;
       padding-bottom: 10px;
