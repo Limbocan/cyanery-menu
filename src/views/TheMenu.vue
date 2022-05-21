@@ -3,13 +3,16 @@
     <SvgIcon />
     <CyMenu
       v-model="active"
+      :open="props.open"
       :data="menuData"
+      :unique="true"
       backgroundColor="#ededed"
       activeColor="#e7e7e7"
       textColor="#787878"
       activeTextCorlor="#248afd"
       width="240px"
       theme="dark"
+      @update:open="(val) => emits('update:open', val)"
       @menu-click="menuClick"
     >
       <template #icon="{ data }">
@@ -23,7 +26,14 @@
 import SvgIcon from './TheSvg.vue'
 import { ref } from 'vue'
 
-const emits = defineEmits(['menu-router'])
+const props = defineProps({
+  open: {
+    type: Boolean,
+    default: true
+  }
+})
+const emits = defineEmits(['menu-router', 'update:open'])
+const open = ref(true)
 
 const menuClick = (val) => {
   if (val.children) return

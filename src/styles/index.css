@@ -142,17 +142,20 @@ code.hljs {
 
 .example {
   display: flex;
+  height: 530px;
   padding: 12px 0 60px 24px;
 }
 
 .tools {
-  padding-left: 20px;
+  height: 100%;
+  padding-left: 100px;
+  width: 100%;
 }
 
 label {
   position: relative;
   display: inline-block;
-  width: 80px;
+  width: 60px;
   height: 30px;
 }
 
@@ -163,17 +166,39 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
+fieldset {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding-left: 16px;
+}
+
+legend {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+strong+label {
+  margin-top: 10px;
+  margin-left: 8px;
+  height: fit-content;
+}
+
 label>input[type="checkbox"]:after {
   content: '';
   position: absolute;
   top: 4px;
   left: 4px;
-  width: 42px;
-  height: 42px;
+  width: 22px;
+  height: 22px;
   /*   visibility: visible; */
   border-radius: 50%;
   background: aqua;
-  transition: transform .5s ease-in-out;
+  transition: transform .2s ease-in-out;
 }
 
 label>input[type="checkbox"]:before {
@@ -181,18 +206,128 @@ label>input[type="checkbox"]:before {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100px;
-  height: 50px;
+  width: 60px;
+  height: 30px;
   /*   visibility: visible; */
-  background: #eee;
+  background: rgb(70, 73, 78);
   border-radius: 25px;
-  transition: background .5s ease-in-out;
+  transition: background .2s ease-in-out;
 }
 
 input[type="checkbox"]:checked:after {
-  transform: translatex(50px)
+  transform: translatex(30px)
 }
 
 input[type="checkbox"]:checked:before {
-  background: #e892a3;
+  background: #3365ed;
+}
+
+.tool-btn {
+  margin-left: 24px;
+  width: fit-content;
+  padding: 6px 12px;
+  border-radius: 16px;
+  color: #6b6864;
+  border: 2px solid #0088ff;
+  cursor: pointer;
+  transition: background .2s ease-in-out, color .2s ease-in-out;
+}
+
+.tool-btn:hover {
+  color: rgb(143, 193, 240);
+  background-color: #1535c1;
+}
+
+.radio {
+  --primary: #6d5dfc;
+  --white: #FFFFFF;
+  --greyLight: #bec8e4;
+  --greyDark: #9baacf;
+  --size: 1.6rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.radio-label {
+  position: relative;
+  display: block;
+  height: var(--size);
+  width: fit-content;
+  line-height: var(--size);
+  cursor: pointer;
+}
+
+.radio-label+.radio-label {
+  margin-top: 10px;
+}
+
+.radio-label>.radio-text {
+  margin-left: calc(var(--size) + 0.4rem);
+}
+
+.radio-input[type="radio"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  cursor: pointer;
+}
+
+.radio-input[type="radio"]::before {
+  content: '';
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight),
+    -0.2rem -0.2rem 0.5rem var(--white);
+}
+
+.radio-input[type="radio"]::after {
+  content: '';
+  position: absolute;
+  left: calc(var(--size) / 4);
+  top: calc(var(--size) / 4);
+  width: calc(var(--size) / 2);
+  height: calc(var(--size) / 2);
+  border-radius: 50%;
+  background: var(--greyDark);
+}
+
+.radio-input:checked::before {
+  box-shadow: inset 0.2rem 0.2rem 0.5rem var(--greyLight),
+    inset -0.2rem -0.2rem 0.5rem var(--white);
+}
+
+.radio-input:checked::after,
+.radio-input:hover::after {
+  background-color: var(--primary);
+}
+
+input[type="color"] {
+  border: none;
+}
+
+.update {
+  margin-bottom: 50px;
+}
+
+.logo {
+  display: inline-block;
+  width: 50px;
+  height: fit-content;
+  vertical-align: middle;
+}
+.logo + .logo {
+  margin-left: 24px;
+}
+
+.header-icon {
+  vertical-align: bottom;
+  margin-left: 12px;
+  cursor: pointer;
 }

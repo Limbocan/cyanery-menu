@@ -1,9 +1,9 @@
 <template>
   <div class="layout-content">
-    <TheHeader />
+    <TheHeader v-model:open="open" />
     <div class="doc-content">
       <div class="left-content">
-        <TheMenu ref="TheMenuRef" @menu-router="menuRouter" />
+        <TheMenu ref="TheMenuRef" :open="open" @menu-router="menuRouter" />
       </div>
       <div ref="contentListRef" class="content-list">
         <Guide />
@@ -11,6 +11,7 @@
         <Methods />
         <Api />
         <Example />
+        <Update />
       </div>
     </div>
   </div>
@@ -25,11 +26,13 @@ import Props from './props/Props.vue'
 import Methods from './methods/Methods.vue'
 import Api from './api/Api.vue'
 import Example from './example/Example.vue'
+import Update from './update/Update.vue'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 
 const TheMenuRef = ref(null)
 const contentListRef = ref(null)
+const open = ref(true)
 
 onMounted(() => {
   const allMenuId = getMenuId(TheMenuRef.value.menuData)
