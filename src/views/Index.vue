@@ -3,10 +3,14 @@
     <TheHeader />
     <div class="doc-content">
       <div class="left-content">
-        <TheMenu ref="TheMenuRef" @menu-click="menuClick" />
+        <TheMenu ref="TheMenuRef" @menu-router="menuRouter" />
       </div>
       <div ref="contentListRef" class="content-list">
         <Guide />
+        <Props />
+        <Methods />
+        <Api />
+        <Example />
       </div>
     </div>
   </div>
@@ -17,6 +21,10 @@ import { ref, onMounted } from 'vue'
 import TheMenu from './TheMenu.vue'
 import TheHeader from './TheHeader.vue'
 import Guide from './guide/Guide.vue'
+import Props from './props/Props.vue'
+import Methods from './methods/Methods.vue'
+import Api from './api/Api.vue'
+import Example from './example/Example.vue'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 
@@ -58,14 +66,14 @@ const getMenuId = (list) => {
   return result
 }
 
-const menuClick = (val) => {
+const menuRouter = (val) => {
   const domId = `${val.path}`
   scrollMenu(domId)
 }
 
 const scrollMenu = (id) => {
-  const viewDom = document.querySelector(id)
-  viewDom.scrollIntoView({ behavior: 'smooth' })
+  const viewDom = contentListRef.value.querySelector(id)
+  viewDom && viewDom.scrollIntoView({ behavior: 'smooth' })
 }
 
 </script>

@@ -23,10 +23,11 @@
 import SvgIcon from './TheSvg.vue'
 import { ref } from 'vue'
 
-const emits = defineEmits(['menu-click'])
+const emits = defineEmits(['menu-router'])
 
 const menuClick = (val) => {
-  emits('menu-click', val)
+  if (val.children) return
+  emits('menu-router', val)
 }
 
 const active = ref('guide')
@@ -61,17 +62,168 @@ const menuData = ref([
   {
     name: '参数',
     key: 'props',
-    path: '#menu-props'
+    path: '#menu-props',
+    children: [
+      {
+        name: 'modelValue',
+        key: 'modelValue',
+        path: '#menu-modelValue'
+      },
+      {
+        name: 'data',
+        key: 'data',
+        path: '#menu-data'
+      },
+      {
+        name: 'className',
+        key: 'className',
+        path: '#menu-className'
+      },
+      {
+        name: 'open',
+        key: 'open',
+        path: '#menu-open'
+      },
+      {
+        name: 'width',
+        key: 'width',
+        path: '#menu-width'
+      },
+      {
+        name: 'closeWidth',
+        key: 'closeWidth',
+        path: '#menu-closeWidth'
+      },
+      {
+        name: 'toggleButton',
+        key: 'toggleButton',
+        path: '#menu-toggleButton'
+      },
+      {
+        name: 'unique',
+        key: 'unique',
+        path: '#menu-unique'
+      },
+      {
+        name: 'trigger',
+        key: 'trigger',
+        path: '#menu-trigger'
+      },
+      {
+        name: 'beforeRouter',
+        key: 'beforeRouter',
+        path: '#menu-beforeRouter'
+      },
+      {
+        name: 'showIcon',
+        key: 'showIcon',
+        path: '#menu-showIcon'
+      },
+      {
+        name: 'offset',
+        key: 'offset',
+        path: '#menu-offset'
+      },
+      {
+        name: 'alwaysPopover',
+        key: 'alwaysPopover',
+        path: '#menu-alwaysPopover'
+      },
+      {
+        name: 'arrowType',
+        key: 'arrowType',
+        path: '#menu-arrowType'
+      },
+      {
+        name: 'theme',
+        key: 'theme',
+        path: '#menu-theme'
+      },
+      {
+        name: 'backgroundColor',
+        key: 'backgroundColor',
+        path: '#menu-backgroundColor'
+      },
+      {
+        name: 'activeColor',
+        key: 'activeColor',
+        path: '#menu-activeColor'
+      },
+      {
+        name: 'textColor',
+        key: 'textColor',
+        path: '#menu-textColor'
+      },
+      {
+        name: 'activeTextCorlor',
+        key: 'activeTextCorlor',
+        path: '#menu-activeTextCorlor'
+      },
+      {
+        name: 'headerRender',
+        key: 'headerRender',
+        path: '#menu-headerRender'
+      },
+      {
+        name: 'footerRender',
+        key: 'footerRender',
+        path: '#menu-footerRender'
+      },
+      {
+        name: 'itemRender',
+        key: 'itemRender',
+        path: '#menu-itemRender'
+      },
+      {
+        name: 'iconRender',
+        key: 'iconRender',
+        path: '#menu-iconRender'
+      }
+    ]
   },
   {
     name: '事件',
     key: 'methods',
-    path: '#menu-methods'
+    path: '#menu-methods',
+    children: [
+      {
+        name: 'update:modelValue',
+        key: 'updatemodelValue',
+        path: '#menu-updatemodelValue'
+      },
+      {
+        name: 'update:open',
+        key: 'updateopen',
+        path: '#menu-updateopen'
+      },
+      {
+        name: 'menu-click',
+        key: 'menu-click',
+        path: '#menu-menu-click'
+      }
+    ]
   },
   {
     name: 'API',
     key: 'api',
-    path: '#menu-api'
+    path: '#menu-api',
+    children: [
+      {
+        name: 'closeAll',
+        key: 'closeAll',
+        path: '#menu-closeAll'
+      },
+      {
+        name: 'openMenu',
+        key: 'openMenu',
+        path: '#menu-openMenu'
+      },
+      {
+        name: 'closeMenu',
+        key: 'closeMenu',
+        path: '#menu-closeMenu'
+      },
+    ]
   },
   {
     name: '示例',

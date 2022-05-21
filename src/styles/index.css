@@ -71,10 +71,39 @@ p {
   margin: 1rem 24px;
 }
 
+strong {
+  position: relative;
+  padding-left: 16px;
+}
+
+strong::before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.value {
+  display: inline-block;
+  margin-top: 10px;
+  border-radius: 3px;
+  padding: .25rem .5rem;
+  margin-left: 10px;
+  font-size: .85em;
+  color: #476582;
+  background-color: rgba(27, 31, 35, .05);
+}
+
 table {
   display: block;
   border-collapse: collapse;
   margin: 1rem 24px;
+  color: #6b6864;
   overflow-x: auto;
 }
 
@@ -109,4 +138,61 @@ code.hljs {
   padding-left: 0;
   font-size: 14px;
   background-color: transparent;
+}
+
+.example {
+  display: flex;
+  padding: 12px 0 60px 24px;
+}
+
+.tools {
+  padding-left: 20px;
+}
+
+label {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 30px;
+}
+
+input[type="checkbox"] {
+  /*   visibility: hidden; */
+  width: 0;
+  height: 0;
+  cursor: pointer;
+}
+
+label>input[type="checkbox"]:after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 42px;
+  height: 42px;
+  /*   visibility: visible; */
+  border-radius: 50%;
+  background: aqua;
+  transition: transform .5s ease-in-out;
+}
+
+label>input[type="checkbox"]:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 50px;
+  /*   visibility: visible; */
+  background: #eee;
+  border-radius: 25px;
+  transition: background .5s ease-in-out;
+}
+
+input[type="checkbox"]:checked:after {
+  transform: translatex(50px)
+}
+
+input[type="checkbox"]:checked:before {
+  background: #e892a3;
 }
