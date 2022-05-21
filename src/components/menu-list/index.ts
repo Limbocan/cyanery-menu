@@ -1,8 +1,7 @@
 
-import { defineComponent, h, PropType, computed, onMounted } from 'vue'
+import { defineComponent, h, PropType, computed, inject } from 'vue'
 import MenuChildList from './menu-list.vue'
 import MenuItem from '../menu-item/menu-item.vue'
-import { globalState } from '../../menu-props'
 import type { MenuItemProps } from '../../types'
 
 // 组件参数
@@ -29,6 +28,7 @@ export const MenuListComponent = defineComponent({
   props: MenuListProps,
   setup(props) {
 
+    const globalState = inject('globalState') as any
     const MENU_NODE = computed(() => {
       const MENU_LIST = formatList([...props.menuList])
       globalState.saveMenus(MENU_LIST)

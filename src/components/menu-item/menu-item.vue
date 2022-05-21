@@ -71,15 +71,15 @@
 </template>
 
 <script lang="ts" setup>
-import { h, ref, PropType, computed } from 'vue'
+import { h, ref, PropType, computed, inject } from 'vue'
 import { getClassFomat } from 'src/utils/use-style'
-import { globalState } from '../../menu-props'
 import type { MenuItemProps } from '../../types'
 import MenuItem from './menu-item.vue'
 import MenuIcon from './icon.vue'
 import ChildList from '../menu-list/menu-list.vue'
 import MenuPopover from '../menu-popover/index.vue'
 
+const globalState = inject('globalState') as any
 const props = defineProps({
   // 菜单项数据
   data: {

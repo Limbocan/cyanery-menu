@@ -37,8 +37,7 @@ export const MenuToggleComponent = defineComponent({
         class: getClassFomat('toggle-box ' + status.value),
         type: 'arrow2',
         onClick: () => toggleClick(),
-      },
-      status.value
+      }
     )
   },
 })

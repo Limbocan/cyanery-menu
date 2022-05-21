@@ -83,7 +83,7 @@ export declare const MenuProps: {
     iconRender: PropType<string | (() => import("vue").VNodeChild)>;
 };
 export declare const MenuEmits: string[];
-declare class GlobalState {
+export declare class GlobalState {
     state: any;
     constructor();
     setMenuProps(props: any): void;
@@ -98,5 +98,3 @@ declare class GlobalState {
     remove(menu: any): void;
     closeAllMenu(): void;
 }
-export declare const globalState: GlobalState;
-export {};

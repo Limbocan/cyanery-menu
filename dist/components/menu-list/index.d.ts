@@ -25,6 +25,6 @@ export declare const MenuListComponent: import("vue").DefineComponent<{
     itemSlot: {};
     iconSlot: {};
 }>>, {
-    deep: number;
     menuList: MenuItemProps[];
+    deep: number;
 }>;

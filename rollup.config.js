@@ -48,7 +48,7 @@ export default defineConfig({
     }),
     typescript(),
     commonjs(),
-    // terser(),
+    terser(),
     postcss(),
     babel({
       exclude: '**/node_modules/**'

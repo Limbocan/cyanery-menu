@@ -118,7 +118,7 @@ export const MenuEmits = [
 ]
 
 // 全局状态
-class GlobalState {
+export class GlobalState {
   state
   constructor() {
     this.state = reactive({
@@ -218,5 +218,3 @@ class GlobalState {
     this.state.openedMenus.splice(0, this.state.openedMenus.length)
   }
 }
-
-export const globalState = new GlobalState()

@@ -167,21 +167,21 @@ export declare const Menu: import("vue").DefineComponent<{
     [x: string & `on${string}`]: (...args: any[]) => any;
 }, {
     data: MenuItemProps[];
-    offset: number;
+    modelValue: string;
+    className: string;
     width: string | number;
     open: boolean;
-    backgroundColor: string;
-    className: string;
-    modelValue: string;
     toggleButton: boolean;
     unique: boolean;
     trigger: string;
     beforeRouter: Function;
     showIcon: boolean;
     closeWidth: string;
+    offset: number;
     alwaysPopover: boolean;
     arrowType: string;
     theme: string;
+    backgroundColor: string;
     activeColor: string;
     textColor: string;
     activeTextCorlor: string;

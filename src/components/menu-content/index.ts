@@ -1,9 +1,9 @@
 
-import { defineComponent, h, nextTick, computed, watch, onMounted } from 'vue'
+import { defineComponent, h, reactive, nextTick, computed, watch, onMounted, provide } from 'vue'
 import { MenuListComponent } from '../menu-list/index'
 import { MenuToggleComponent } from '../menu-toggle/index'
 import { componentConfig, themeConfig, getStyleFormat, getClassFomat } from 'src/utils/use-style'
-import { MenuProps, MenuEmits, globalState } from '../../menu-props'
+import { MenuProps, MenuEmits, GlobalState } from '../../menu-props'
 import type { MenuItemProps } from '../../types'
 
 // 组件
@@ -12,6 +12,10 @@ export const Menu = defineComponent({
   props: MenuProps,
   emits: MenuEmits,
   setup(props, { emit, slots, expose }) {
+
+    const globalState = reactive(new GlobalState())
+
+    provide('globalState', globalState)
 
     // 设置全局emits
     globalState.setMenuEmit(emit)
