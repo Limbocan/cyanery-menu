@@ -1,39 +1,97 @@
 <template>
   <div class="layout-content">
-    <TheMenu />
-    <div class="left-content">
-      <TheHeader />
-      <div class="content-list">
-        <TheStart />
+    <TheHeader />
+    <div class="doc-content">
+      <div class="left-content">
+        <TheMenu ref="TheMenuRef" @menu-click="menuClick" />
+      </div>
+      <div ref="contentListRef" class="content-list">
+        <Guide />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import TheMenu from './TheMenu.vue'
 import TheHeader from './TheHeader.vue'
-import TheStart from './example/TheStart.vue'
+import Guide from './guide/Guide.vue'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github.css'
+
+const TheMenuRef = ref(null)
+const contentListRef = ref(null)
+
+onMounted(() => {
+  const allMenuId = getMenuId(TheMenuRef.value.menuData)
+
+  const getActiveId = (dom) => {
+    const listDom = dom || document.querySelector('.content-list')
+    const scrollTop = listDom.scrollTop
+    const menuDoms = listDom.querySelectorAll(allMenuId.join(','))
+    const domInfo = [...menuDoms].map(m => {
+      return { id: m.id, val: Math.abs(m.offsetTop - scrollTop) }
+    })
+    const top = Math.min(...domInfo.map(m => m.val))
+    const activeDom = domInfo.find(m => m.val === top)?.id
+    return `#${activeDom}`
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('pre code').forEach((el) => {
+      hljs.highlightElement(el)
+    })
+  })
+  contentListRef.value.addEventListener('scroll', (e) => {
+    const active = getActiveId(e.target)
+    TheMenuRef.value.setActive(active)
+  })
+})
+
+const getMenuId = (list) => {
+  const result = []
+  list.forEach(menu => {
+    result.push(menu.path)
+    if (menu.children) result.push(...getMenuId(menu.children))
+  })
+  return result
+}
+
+const menuClick = (val) => {
+  const domId = `${val.path}`
+  scrollMenu(domId)
+}
+
+const scrollMenu = (id) => {
+  const viewDom = document.querySelector(id)
+  viewDom.scrollIntoView({ behavior: 'smooth' })
+}
 
 </script>
 
 <style scoped>
 .layout-content {
+  --header-height: 60px;
+  --bg-color: #ededed;
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: row;
   overflow: hidden;
 }
+.doc-content {
+  height: calc(100% - var(--header-height));
+  margin-top: var(--header-height);
+  display: flex;
+  background-color: var(--bg-color);
+}
 .left-content {
-  --header-height: 50px;
   height: 100%;
-  flex: 1;
 }
 .content-list {
-  height: calc(100% - var(--header-height));
+  flex: 1;
+  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 12px 12%;
+  padding: 12px 50px;
 }
 </style>

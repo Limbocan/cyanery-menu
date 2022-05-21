@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "cyanery-menu": "^1.0.2",
+    "highlight.js": "^11.5.1",
     "vue": "^3.2.25"
   },
   "devDependencies": {
