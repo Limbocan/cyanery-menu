@@ -11,6 +11,7 @@
         <Methods />
         <Api />
         <Example />
+        <Popover />
         <Update />
       </div>
     </div>
@@ -26,6 +27,7 @@ import Props from './props/Props.vue'
 import Methods from './methods/Methods.vue'
 import Api from './api/Api.vue'
 import Example from './example/Example.vue'
+import Popover from './popover/Popover.vue'
 import Update from './update/Update.vue'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'

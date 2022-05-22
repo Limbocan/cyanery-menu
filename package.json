@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "cyanery-menu": "^1.0.4",
+    "cyanery-menu": "^1.0.5",
     "highlight.js": "^11.5.1",
     "vue": "^3.2.25"
   },

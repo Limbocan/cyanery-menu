@@ -241,6 +241,11 @@ const menuData = ref([
     path: '#menu-example'
   },
   {
+    name: 'Popover浮窗',
+    key: 'popover',
+    path: '#menu-popover'
+  },
+  {
     name: '更新',
     key: 'update',
     path: '#menu-update'
