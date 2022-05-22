@@ -1,7 +1,7 @@
 import type { MenuItemProps } from '../../types';
 export declare const Menu: import("vue").DefineComponent<{
     modelValue: {
-        type: import("vue").PropType<string> | StringConstructor;
+        type: StringConstructor | import("vue").PropType<string>;
         default: any;
     };
     data: {
@@ -84,7 +84,7 @@ export declare const Menu: import("vue").DefineComponent<{
     ContentRef: any;
     props: Readonly<import("@vue/shared").LooseRequired<Readonly<import("vue").ExtractPropTypes<{
         modelValue: {
-            type: import("vue").PropType<string> | StringConstructor;
+            type: StringConstructor | import("vue").PropType<string>;
             default: any;
         };
         data: {
@@ -186,7 +186,7 @@ export declare const Menu: import("vue").DefineComponent<{
     }>[]>;
 }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, string[], string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
     modelValue: {
-        type: import("vue").PropType<string> | StringConstructor;
+        type: StringConstructor | import("vue").PropType<string>;
         default: any;
     };
     data: {
