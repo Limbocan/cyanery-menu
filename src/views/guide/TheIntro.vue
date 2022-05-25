@@ -2,6 +2,8 @@
   <h1 id="menu-guide">指引</h1>
   <h2 id="menu-intro">介绍</h2>
   <p>基于Vue3的菜单组件，可自定义主题样式、插槽和渲染方法。</p>
+  <p><strong>GitHub地址:</strong>  <a href="https://github.com/Limbocan/cyanery-menu">github.com/Limbocan/cyanery-menu</a></p>
+  <p><strong>Npm地址:</strong>  <a href="https://www.npmjs.com/package/cyanery-menu">npmjs.com/package/cyanery-menu</a></p>
   <table>
     <thead>
       <th>依赖项</th>
