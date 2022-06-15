@@ -1,5 +1,5 @@
 <template>
-  <transition name="collapse" v-on="listeners">
+  <transition v-on="listeners">
     <slot name="default" />
   </transition>
 </template>
@@ -9,9 +9,9 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   setup() {
-
     const listeners = {
       beforeEnter(el) {
+        el.classList.add('collapse-transition')
         if (!el.dataset) el.dataset = {}
         el.dataset.oldPaddingTop = el.style.paddingTop
         el.dataset.oldPaddingBottom = el.style.paddingBottom
@@ -37,6 +37,7 @@ export default defineComponent({
         el.style.overflow = el.dataset.oldOverflow
       },
       beforeLeave(el) {
+        el.classList.add('collapse-transition')
         if (!el.dataset) el.dataset = {}
         el.dataset.oldPaddingTop = el.style.paddingTop
         el.dataset.oldPaddingBottom = el.style.paddingBottom
