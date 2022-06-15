@@ -17,14 +17,6 @@ declare const _default: import("vue").DefineComponent<{
         default: any;
     };
 }, {
-    listeners: {
-        beforeEnter(el: any): void;
-        enter(el: any): void;
-        afterEnter(el: any): void;
-        beforeLeave(el: any): void;
-        leave(el: any): void;
-        afterLeave(el: any): void;
-    };
     props: Readonly<import("@vue/shared").LooseRequired<Readonly<import("vue").ExtractPropTypes<{
         child: {
             type: ArrayConstructor;

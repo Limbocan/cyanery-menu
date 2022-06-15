@@ -18,24 +18,24 @@
 
         &:hover {
           background-color: rgba(0, 0, 0, 0.1);
-          border-left-color: var(#{$prefix}-theme-active-color);
+          border-left-color: var(#{$prefix}-theme-active-text-color);
         }
 
-        // 展开样式
-        &.#{$preName}-open-list {
+        // // 展开样式
+        // &.#{$preName}-open-list {
 
-          &>.#{$preName}-menu-icon,
-          &>.#{$preName}-menu-text,
-          &>.#{$preName}-open-status {
-            color: #fff;
-            fill: #fff;
-          }
-        }
+        //   &>.#{$preName}-menu-icon,
+        //   &>.#{$preName}-menu-text,
+        //   &>.#{$preName}-open-status {
+        //     color: #fff;
+        //     fill: #fff;
+        //   }
+        // }
 
         // 活跃样式
         &.#{$preName}-open-active {
-          color: var(#{$prefix}-theme-active-color);
-          border-left-color: var(#{$prefix}-theme-active-color);
+          color: var(#{$prefix}-theme-active-text-color);
+          border-left-color: var(#{$prefix}-theme-active-text-color);
 
           &::before {
             content: '';
@@ -43,7 +43,7 @@
             left: 0;
             top: 50%;
             border: 4px solid transparent;
-            border-left-color: var(#{$prefix}-theme-active-color);
+            border-left-color: var(#{$prefix}-theme-active-text-color);
             transform: translateY(-50%);
             transition: border .3s ease-in-out;
           }
@@ -51,8 +51,8 @@
           &>.#{$preName}-menu-icon,
           &>.#{$preName}-menu-text,
           &>.#{$preName}-active-status {
-            color: var(#{$prefix}-theme-active-color);
-            fill: var(#{$prefix}-theme-active-color);
+            color: var(#{$prefix}-theme-active-text-color);
+            fill: var(#{$prefix}-theme-active-text-color);
           }
         }
 
@@ -71,7 +71,7 @@
 
     // 子列表
     &[class*="#{$preName}-list-child"]:not(.#{$preName}-list-child-0) {
-      background-color: #60686a;
+      background-color: var(#{$prefix}-theme-active-color);
     }
   }
   // 浮窗
@@ -144,7 +144,7 @@
       padding-top: 8px;
       padding-bottom: 8px;
       padding-right: 26px;
-      color: #e4e6ec;
+      // color: #e4e6ec;
       &::before {
         content: '';
         position: absolute;

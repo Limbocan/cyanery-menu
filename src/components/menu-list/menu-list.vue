@@ -1,5 +1,5 @@
 <template>
-  <transition name="collapse" v-on="listeners">
+  <collapse>
     <ul
       v-show="props.open"
       :class="getClassFomat(`menu-list list-child-${props.deep} ${props.open ? 'toggle-open' : 'toggle-close'}`)"
@@ -8,11 +8,12 @@
         <component :is="item" :is-popover="props.isPopover" />
       </template>
     </ul>
-  </transition>
+  </collapse>
 </template>
 
 <script lang="ts">
 import { PropType, defineComponent } from 'vue'
+import collapse from '../menu-collapse/index.vue'
 import { getClassFomat } from 'src/utils/use-style'
 
 const listProps = {
@@ -38,60 +39,11 @@ const listProps = {
 }
 
 export default defineComponent({
+  components: { collapse },
   props: listProps,
   setup(props) {
 
-    const listeners = {
-      beforeEnter(el) {
-        if (!el.dataset) el.dataset = {}
-        el.dataset.oldPaddingTop = el.style.paddingTop
-        el.dataset.oldPaddingBottom = el.style.paddingBottom
-        el.style.maxHeight = 0
-        el.style.paddingTop = 0
-        el.style.paddingBottom = 0
-      },
-      enter(el) {
-        el.dataset.oldOverflow = el.style.overflow
-        if (el.scrollHeight !== 0) {
-          el.style.maxHeight = `${el.scrollHeight}px`
-          el.style.paddingTop = el.dataset.oldPaddingTop
-          el.style.paddingBottom = el.dataset.oldPaddingBottom
-        } else {
-          el.style.maxHeight = 0
-          el.style.paddingTop = el.dataset.oldPaddingTop
-          el.style.paddingBottom = el.dataset.oldPaddingBottom
-        }
-        el.style.overflow = 'hidden'
-      },
-      afterEnter(el) {
-        el.style.maxHeight = ''
-        el.style.overflow = el.dataset.oldOverflow
-      },
-      beforeLeave(el) {
-        if (!el.dataset) el.dataset = {}
-        el.dataset.oldPaddingTop = el.style.paddingTop
-        el.dataset.oldPaddingBottom = el.style.paddingBottom
-        el.dataset.oldOverflow = el.style.overflow
-        el.style.maxHeight = `${el.scrollHeight}px`
-        el.style.overflow = 'hidden'
-      },
-      leave(el) {
-        if (el.scrollHeight !== 0) {
-          el.style.maxHeight = 0
-          el.style.paddingTop = 0
-          el.style.paddingBottom = 0
-        }
-      },
-      afterLeave(el) {
-        el.style.maxHeight = ''
-        el.style.overflow = el.dataset.oldOverflow
-        el.style.paddingTop = el.dataset.oldPaddingTop
-        el.style.paddingBottom = el.dataset.oldPaddingBottom
-      },
-    }
-
     return {
-      listeners,
       props,
       getClassFomat
     }

@@ -10,16 +10,16 @@ export const themeConfig = {
   normal: {
     closeWidth: '44px',
     backgroundColor: '#333',
-    activeColor: '#e67e22',
-    textColor: '#fff',
+    activeColor: '#425873',
+    textColor: '#b7b7b7',
     activeTextCorlor: '#fff'
   },
   primary: {
     closeWidth: '38px',
-    backgroundColor: '#223e9c',
-    activeColor: '#2753c0',
+    backgroundColor: '#002654',
+    activeColor: '#285a92',
     textColor: '#fff',
-    activeTextCorlor: '#54fdff'
+    activeTextCorlor: '#54c5ff'
   },
   dark: {
     closeWidth: '38px',
