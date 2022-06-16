@@ -1,5 +1,5 @@
 <template>
-  <transition v-on="listeners">
+  <transition name="cy-collapse" v-on="listeners">
     <slot name="default" />
   </transition>
 </template>

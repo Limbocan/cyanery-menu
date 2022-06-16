@@ -14,7 +14,7 @@
   box-shadow: 0 0 12px #0000004a;
   user-select: none;
   // overflow: hidden;
-  transition: width .2s ease-in-out;
+  transition: width var(#{$prefix}-animate-time, .3s) ease-in-out;
 
   // 菜单收起状态样式
   &.#{$preName}-close-status {
@@ -67,6 +67,7 @@
     width: 100%;
     flex: 1;
     overflow: auto;
+    transition: background var(#{$prefix}-animate-time, .3s) ease-in-out;
 
     // 菜单项样式
     & .#{$preName}-menu-item {
@@ -85,7 +86,9 @@
         cursor: pointer;
         text-overflow: ellipsis;
         overflow: hidden;
-        transition: background .2s ease-in-out, border .2s ease-in-out, color .2s ease-in-out;
+        transition: backgroundvar(#{$prefix}-animate-time, .3s) ease-in-out,
+          border var(#{$prefix}-animate-time, .3s) ease-in-out,
+          color var(#{$prefix}-animate-time, .3s) ease-in-out;
 
         // 菜单图标
         .#{$preName}-menu-icon {
@@ -102,7 +105,7 @@
           fill: var(#{$prefix}-theme-text-color);
           position: absolute;
           right: 4px;
-          transition: transform .2s linear;
+          transition: transform var(#{$prefix}-animate-time, .3s) linear;
 
           &.#{$preName}-open-status {
             transform: rotate(90deg);

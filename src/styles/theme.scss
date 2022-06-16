@@ -45,7 +45,7 @@
             border: 4px solid transparent;
             border-left-color: var(#{$prefix}-theme-active-text-color);
             transform: translateY(-50%);
-            transition: border .3s ease-in-out;
+            transition: border var(#{$prefix}-animate-time, .3s) ease-in-out;
           }
 
           &>.#{$preName}-menu-icon,
