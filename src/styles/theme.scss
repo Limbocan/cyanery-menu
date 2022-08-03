@@ -240,6 +240,7 @@
     }
 
     .#{$preName}-list-child-1 {
+      transition: box-shadow var(#{$prefix}-animate-time, .3s) ease-in-out;
       box-shadow: 0px -18px 0 -12px var(#{$prefix}-theme-active-color);
     }
   }

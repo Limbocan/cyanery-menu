@@ -9,6 +9,10 @@ export declare const MenuProps: {
         type: PropType<MenuItemProps[]>;
         default: () => any[];
     };
+    labelProp: {
+        type: PropType<string>;
+        default: string;
+    };
     className: {
         type: PropType<string>;
         default: string;

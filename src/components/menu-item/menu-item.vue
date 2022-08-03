@@ -36,7 +36,7 @@
               />
               <MenuIcon v-else-if="globalState.state.MenuPropsData.showIcon && props.deep === 1" />
             </div>
-            <span :class="getClassFomat('menu-text')">{{ props.data.name }}</span>
+            <span :class="getClassFomat('menu-text')">{{ props.data[globalState.state.MenuPropsData.labelProp] }}</span>
             <MenuIcon
               v-if="hasChild"
               :class="getClassFomat(`col-icon ${isOpen ? 'open-status' : ''} ${isActive ? 'active-status' : ''}`)"
@@ -56,7 +56,7 @@
           :open="true"
           :is-popover="true"
         />
-        <span v-else :class="getClassFomat('popover-label')">{{ props.data.name }}</span>
+        <span v-else :class="getClassFomat('popover-label')">{{ props.data[globalState.state.MenuPropsData.labelProp] }}</span>
       </template>
     </MenuPopover>
     <!-- 子菜单项列表 -->

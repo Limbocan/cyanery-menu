@@ -15,6 +15,10 @@ export const MenuProps = {
     type: Array as PropType<MenuItemProps[]>,
     default: () => [],
   },
+  labelProp: {
+    type: String as PropType<string>,
+    default: 'name'
+  },
   // 样式类
   className: {
     type: String as PropType<string>,

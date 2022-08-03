@@ -67,7 +67,11 @@
     width: 100%;
     flex: 1;
     overflow: auto;
-    transition: background var(#{$prefix}-animate-time, .3s) ease-in-out;
+    transition: background var(#{$prefix}-animate-time, .3s) ease-in-out,
+      height var(#{$prefix}-animate-time, .3s) ease-in-out,
+      padding-top var(#{$prefix}-animate-time, .3s) ease-in-out,
+      padding-bottom var(#{$prefix}-animate-time, .3s) ease-in-out,
+      max-height var(#{$prefix}-animate-time, .3s) ease-in-out;
 
     // 菜单项样式
     & .#{$preName}-menu-item {
@@ -86,9 +90,10 @@
         cursor: pointer;
         text-overflow: ellipsis;
         overflow: hidden;
-        transition: backgroundvar(#{$prefix}-animate-time, .3s) ease-in-out,
+        transition: background var(#{$prefix}-animate-time, .3s) ease-in-out,
           border var(#{$prefix}-animate-time, .3s) ease-in-out,
-          color var(#{$prefix}-animate-time, .3s) ease-in-out;
+          color var(#{$prefix}-animate-time, .3s) ease-in-out,
+          margin var(#{$prefix}-animate-time, .3s) ease-in-out;
 
         // 菜单图标
         .#{$preName}-menu-icon {
@@ -192,12 +197,12 @@
   }
 }
 
-.collapse-transition {
-  transition: height var(#{$prefix}-animate-time, .3s) ease-in-out,
-  padding-top var(#{$prefix}-animate-time, .3s) ease-in-out,
-  padding-bottom var(#{$prefix}-animate-time, .3s) ease-in-out,
-  max-height var(#{$prefix}-animate-time, .3s) ease-in-out;
-}
+// .cy-collapse-transition {
+//   transition: height var(#{$prefix}-animate-time, .3s) ease-in-out,
+//   padding-top var(#{$prefix}-animate-time, .3s) ease-in-out,
+//   padding-bottom var(#{$prefix}-animate-time, .3s) ease-in-out,
+//   max-height var(#{$prefix}-animate-time, .3s) ease-in-out;
+// }
 
 .popover-enter-active,
 .popover-leave-active {
