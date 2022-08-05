@@ -198,12 +198,14 @@
   }
 }
 
-// .cy-collapse-transition {
-//   transition: height var(#{$prefix}-animate-time, .3s) ease-in-out,
-//   padding-top var(#{$prefix}-animate-time, .3s) ease-in-out,
-//   padding-bottom var(#{$prefix}-animate-time, .3s) ease-in-out,
-//   max-height var(#{$prefix}-animate-time, .3s) ease-in-out;
-// }
+.cy-collapse-transition {
+  transition: background var(#{$prefix}-animate-time, .3s) ease-in-out,
+    height var(#{$prefix}-animate-time, .3s) ease-in-out,
+    padding-top var(#{$prefix}-animate-time, .3s) ease-in-out,
+    padding-bottom var(#{$prefix}-animate-time, .3s) ease-in-out,
+    max-height var(#{$prefix}-animate-time, .3s) ease-in-out,
+    box-shadow var(#{$prefix}-animate-time, .3s) ease-in-out;
+}
 
 .popover-enter-active,
 .popover-leave-active {
