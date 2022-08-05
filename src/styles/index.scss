@@ -71,7 +71,8 @@
       height var(#{$prefix}-animate-time, .3s) ease-in-out,
       padding-top var(#{$prefix}-animate-time, .3s) ease-in-out,
       padding-bottom var(#{$prefix}-animate-time, .3s) ease-in-out,
-      max-height var(#{$prefix}-animate-time, .3s) ease-in-out;
+      max-height var(#{$prefix}-animate-time, .3s) ease-in-out,
+      box-shadow var(#{$prefix}-animate-time, .3s) ease-in-out;
 
     // 菜单项样式
     & .#{$preName}-menu-item {

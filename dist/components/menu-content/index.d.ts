@@ -8,6 +8,10 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<MenuItemProps[]>;
         default: () => any[];
     };
+    labelProp: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     className: {
         type: import("vue").PropType<string>;
         default: string;
@@ -90,6 +94,10 @@ export declare const Menu: import("vue").DefineComponent<{
         data: {
             type: import("vue").PropType<MenuItemProps[]>;
             default: () => any[];
+        };
+        labelProp: {
+            type: import("vue").PropType<string>;
+            default: string;
         };
         className: {
             type: import("vue").PropType<string>;
@@ -193,6 +201,10 @@ export declare const Menu: import("vue").DefineComponent<{
         type: import("vue").PropType<MenuItemProps[]>;
         default: () => any[];
     };
+    labelProp: {
+        type: import("vue").PropType<string>;
+        default: string;
+    };
     className: {
         type: import("vue").PropType<string>;
         default: string;
@@ -270,6 +282,7 @@ export declare const Menu: import("vue").DefineComponent<{
 }, {
     data: MenuItemProps[];
     modelValue: string;
+    labelProp: string;
     className: string;
     width: string | number;
     open: boolean;

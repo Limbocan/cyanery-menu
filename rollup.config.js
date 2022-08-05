@@ -29,11 +29,12 @@ export default defineConfig({
     },
     {
       file: pkg.browser,
-      format: 'umd',
+      format: 'iife',
       exports: 'named',
       name: 'cyanMenu',
       globals: {
-        'vue': 'vue' // 指明 global.vue 即是外部依赖 vue
+        'vue': 'Vue', // 指明 global.vue 即是外部依赖 vue
+        'Vue': 'Vue' // 指明 global.vue 即是外部依赖 vue
       }
     },
   ],
