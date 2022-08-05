@@ -57,6 +57,13 @@
     <strong>默认:</strong><code class="value">''</code>
     <p>菜单样式类名</p>
   </p>
+  <h2 id="menu-labelProp">labelProp</h2>
+  <p>
+    <strong>类型:</strong><code class="value">string</code>
+    <br />
+    <strong>默认:</strong><code class="value">''</code>
+    <p>菜单文字显示属性值</p>
+  </p>
   <h2 id="menu-open">open</h2>
   <p>
     <strong>类型:</strong><code class="value">boolean | undefined</code>

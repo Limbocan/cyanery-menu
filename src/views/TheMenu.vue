@@ -90,6 +90,11 @@ const menuData = ref([
         path: '#menu-className'
       },
       {
+        name: 'labelProp',
+        key: 'labelProp',
+        path: '#menu-labelProp'
+      },
+      {
         name: 'open',
         key: 'open',
         path: '#menu-open'
@@ -244,6 +249,11 @@ const menuData = ref([
     name: 'Popover浮窗',
     key: 'popover',
     path: '#menu-popover'
+  },
+  {
+    name: 'Collapse组件',
+    key: 'Collapse',
+    path: '#menu-collapse'
   },
   {
     name: '更新',

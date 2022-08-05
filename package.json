@@ -1,14 +1,14 @@
 {
   "name": "cyanery-menu-doc",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.2.0",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "cyanery-menu": "^1.0.5",
+    "cyanery-menu": "^1.2.0",
     "highlight.js": "^11.5.1",
     "vue": "^3.2.25"
   },
